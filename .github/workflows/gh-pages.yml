@@ -28,10 +28,6 @@ jobs:
     - name: Publish .NET Core Project
       run: dotnet publish PortfolioBlazorWasm/PortfolioBlazorWasm.csproj -c:Release -p:GHPages=true -o dist/Web --nologo
 
-    # Change href in index.html from / to /PortfolioBlazorWasm or /pathfinding to /PortfolioBlazorWasm/pathfinding 
-    - name: Change href in index.html from / to PortfolioBlazorWasm
-      run: sed -i 's/<a href="\//<a href="\/PortfolioBlazorWasm\//g' dist/Web/wwwroot/index.html
-
     - name: Commit wwwroot to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
