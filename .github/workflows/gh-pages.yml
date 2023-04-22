@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     # Checkout the code
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v1
     # sets up .NET Core SDK 7.0.x
     - name: Setup .NET Core SDK
       uses: actions/setup-dotnet@v3.0.3
@@ -23,7 +23,11 @@ jobs:
     # Install dotnet wasm buildtools workload
     - name: Install .NET WASM Build Tools
       run: dotnet workload install wasm-tools
-      
+
+    # changes the base-tag in index.html from '/' to 'PortfolioBlazorWasm' to match GitHub Pages repository subdirectory
+    - name: Change base-tag in index.html from / to PortfolioBlazorWasm
+      run: sed -i 's/<base href="\/" \/>/<base href="\/PortfolioBlazorWasm\/" \/>/g' release/wwwroot/index.html
+	  
     # Publishes Blazor project to the release-folder
     - name: Publish .NET Core Project
       run: dotnet publish PortfolioBlazorWasm/PortfolioBlazorWasm.csproj -c:Release -p:GHPages=true -o dist/Web --nologo
