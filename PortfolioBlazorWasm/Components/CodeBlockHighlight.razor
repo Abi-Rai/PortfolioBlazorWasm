@@ -1,0 +1,21 @@
+﻿@inject IJSRuntime _jsRuntime;
+@if (HeadingText is not null)
+{
+    <MudChip Label="true" Size="Size.Small" Style="inset: 6px -4px;border-radius: 3px 3px 0px 0px;" Variant="Variant.Filled">@HeadingText</MudChip>
+}
+<MudPaper Class="border-1 overflow-auto relative z-10" Outlined="true" Square="false" MaxHeight="@MaxHeight" Elevation="100">
+    <pre class="code"><code>@ChildContent</code></pre>
+</MudPaper>
+@code 
+{
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public string? HeadingText { get; set; } = null;
+    [Parameter] public string MaxHeight { get; set; } = "500px";
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await _jsRuntime.InvokeVoidAsync("highlightSnippet");
+        }
+    }
+}

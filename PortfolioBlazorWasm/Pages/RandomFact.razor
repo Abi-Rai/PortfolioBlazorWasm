@@ -1,0 +1,89 @@
+﻿@page "/randomfact"
+@using PortfolioBlazorWasm.Components
+@using PortfolioBlazorWasm.Services;
+@using PortfolioBlazorWasm.Models.FactsApi;
+@using PortfolioBlazorWasm.Services.FactsApiService;
+@using PortfolioBlazorWasm.Services.SessionStorageService;
+
+@inject IFactsApiClient _factsApiClient;
+@inject ISessionStorageService _sessionStorageService;
+
+<PageTitle>State Management/Data persistance in Blazor WASM</PageTitle>
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h6">Data persistance in Blazor WASM</MudText>
+    <MudDivider DividerType="DividerType.Middle" />
+    <MudGrid>
+        <MudItem xs="12">
+            <MudText Class="py-2" Typo="Typo.body1">Here we make api calls to an external endpoint, after each call is made the response is saved in the browsers session storage. This enables our saved data to persist throughout the application i.e. when navigating between different pages.</MudText>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            @if (_fact is null)
+            {
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            }
+            else
+            {
+                <MudCard Elevation="3" Style="height:200px;overflow:auto">
+                    <MudCardContent>
+                        <MudText Typo="Typo.h6">Random Fact</MudText>
+                        <MudDivider DividerType="DividerType.Middle" Style="padding-bottom:5px" />
+                        <MudText Typo="Typo.body1">@_fact.Text</MudText>
+                    </MudCardContent>
+                </MudCard>
+            }
+            <MudStack Justify="Justify.Center" Row="true">
+                <MudButton Variant="@(_overCallLimit?Variant.Outlined:Variant.Filled)" Color="Color.Primary" OnClick="GetRandomFact" Style="height:32px;width:250px;margin-top:20px;" StartIcon="@(_overCallLimit?@Icons.Material.Filled.CallReceived:Icons.Material.Filled.SwapCalls)">@(_overCallLimit ? "Get from stored session" : "Get from Api")</MudButton>
+                    <MudBadge Content="@_callsMade" Color="@(_overCallLimit?Color.Error:Color.Info)" Overlap="true" Class="mx-6 my-4">
+                        <MudChip Label="true" Color="@(_overCallLimit?Color.Error:Color.Info)" Variant="Variant.Text" Text="Calls made"></MudChip>
+                    </MudBadge>
+                </MudStack>
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                @if (_sessionStoredFacts is null)
+            {
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            }
+            else
+            {
+                <MudSimpleTable Hover="true" Dense="true" Bordered="true" FixedHeader="@_fixedHeader" Elevation="3" Style="@(_fixedHeader?"height:300px":" ")">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Stored Facts in session storage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < _sessionStoredFacts.Count; i++)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>@_sessionStoredFacts[i].Text</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </MudSimpleTable>
+            }
+            <MudSwitch @bind-Checked="@_fixedHeader">Collapse Table</MudSwitch>
+        </MudItem>
+        <MudItem xs="12">
+        <MudDivider DividerType="DividerType.Middle" />
+        </MudItem>
+        <MudItem xs="12">
+            <MudText Typo="Typo.body2"> Registering the services</MudText>
+            <CodeBlockHighlight HeadingText="program.cs">@_programDICode</CodeBlockHighlight>
+        </MudItem>
+        <MudItem xs="12">
+            <CodeBlockHighlight HeadingText="FactsApiclient.cs">@_factServiceCode</CodeBlockHighlight>
+        </MudItem>
+        <MudItem xs="12">
+            <CodeBlockHighlight HeadingText="SessionStorageService.cs">@_sessionSeviceCode</CodeBlockHighlight>
+        </MudItem>
+        <MudItem xs="12">
+            <CodeBlockHighlight HeadingText="RandomFact.razor">@_factRazorComponentCode</CodeBlockHighlight>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
+<MudDivider DividerType="DividerType.Middle" />
+
+

@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: portfolio-blazorwasm-image
+    container_name: portfolio-blazorwasm-container
+    ports:
+      - "8080:80"

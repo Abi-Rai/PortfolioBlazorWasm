@@ -1,0 +1,76 @@
+﻿@page "/themeing"
+@using PortfolioBlazorWasm.Components
+<PageTitle>Theme setup</PageTitle>
+
+<MudStack>
+    <MudPaper Class="pa-4">
+        <MudText Typo="Typo.h6">Page theme</MudText>
+        <MudDivider DividerType="DividerType.Middle" />
+        <MudText Typo="Typo.body1" Class="py-2">
+            The theme is initially set to your browsers system preference. It can be changed by clicking on the Dark/Light icon on the app bar (top right) 
+            <br />
+            The implementation in Blazor WASM involves using <code>IJSRuntime</code> to invoke the function that returns the browsers system settings.
+        </MudText>
+        <CodeBlockHighlight HeadingText="system watch function">@_mudThemeJSCode</CodeBlockHighlight>
+        <MudText Typo="Typo.body1" Class="py-3">
+            Luckily <MudElement HtmlTag="a" Class="ma-0" Style="color:mediumpurple;font-weight:bold;" href="https://github.com/MudBlazor/MudBlazor" target="blank">MudBlazor</MudElement>
+            already handles this under the hood and exposes it as a function in their <code>MudThemeProvider</code> component.
+            <br />
+        </MudText>
+        <CodeBlockHighlight HeadingText="MainLayout.razor">@_mudThemeRazorCode</CodeBlockHighlight>
+        <MudExpansionPanels Elevation="1">
+            <MudExpansionPanel>
+                <TitleContent>
+                    <div class="d-flex flex-row-reverse">
+                        <MudText Typo="Typo.caption" Color="Color.Info" Align="Align.End" Class="object-right">See it in action</MudText>
+                    </div>
+                </TitleContent>
+                <ChildContent>
+                    <MudImage Src="images/systemDarkLight.gif" Alt="System preference changed changing theme" Height="400" Elevation="25" Fluid="true" Class="rounded-lg" ObjectFit="ObjectFit.Contain" />
+                </ChildContent>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+        <MudText Typo="Typo.body1" Class="py-2">
+            Finally I pass down the <code>MudThemeProvider</code> as a <code>CascadingValue</code> from the MainContent. Now any component
+            that needs to access the MudThemeProvider properties, can simply declare a <code>public MudThemProvider</code> property and decorate that 
+            property with the <code>CascadingParameter</code> attribute.
+            
+        </MudText>
+        <CodeBlockHighlight HeadingText="MainLayout.razor">@_mudThemeCascadingValue</CodeBlockHighlight>
+        <MudText Typo="Typo.body1" Class="py-2">
+            For example, in my <code>Pathfinding.razor</code> component, I pass in the <code>MudThemeProvider</code>. Here I style a class based on the current <code>MudThemeProvider.IsDarkMode</code> property.
+        </MudText>
+        <CodeBlockHighlight HeadingText="Pathfinding.razor">@_mudThemeCascadingParameter</CodeBlockHighlight>
+    </MudPaper>
+
+
+    <MudPaper Class="pa-4">
+        <MudText Typo="Typo.h6">Code block syntax highlighting</MudText>
+        <MudDivider DividerType="DividerType.Middle" />
+        <MudText Typo="Typo.body1" Class="py-3">
+            For highlighting the code syntax, i'm using <MudElement HtmlTag="a" Class="ma-0" Style="color:red;font-weight:bold;" href="https://highlightjs.org/" target="blank">highlight.js</MudElement>
+            <br />
+            I've set it up to invoke the <code>window.highlightSnippet</code> function in <code>themeChanger.js</code> whenever code syntax blocks render on the page.<br />
+            This function selects all the text in the <code>&lt;pre&gt;&lt;code&gt;</code> elements and auto-detects the programming language for the text then styles them.
+        </MudText>
+        <CodeBlockHighlight HeadingText="themeChanger.js">@_highlightJSCode</CodeBlockHighlight>
+        <MudText Typo="Typo.body1" Class="py-3">
+            I've also setup two different styles for dark mode and light mode, here we switch the stylesheet used for highlighting the code depending on the theme.
+            <br />
+            <br />
+            How it works is, when the site initially loads, it gets the system preference then sets that to the ThemeProviders' theme.
+            Next, it invokes the `window.themeIsDark` function in `themeChanger.js` which sets the initial stylesheet to use based on the system preference.
+            <br />
+            Then, there's two different EventCallbacks that can change the site's theme.
+            <ul style="list-style-type:circle;"class="pl-8">
+                <li>When the system preference changes.</li>
+
+                <li>When the theme is manually changed via the appbar icon</li>
+            </ul>
+            Whenever any of these events take place the `window.themeIsDark` function is called to switch the stylesheet. 
+        </MudText>
+        <CodeBlockHighlight HeadingText="MainLayour.razor">@_highlightRazorCode</CodeBlockHighlight>
+    </MudPaper>
+</MudStack>
+
+

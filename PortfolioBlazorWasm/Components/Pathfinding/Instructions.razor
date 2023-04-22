@@ -1,0 +1,50 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.h6" Color="Color.Primary">
+            Design mode
+        </MudText>
+        <MudText Typo="Typo.body2">
+            You can <b>either</b> place walls or move Start/Finish cells at the same time.<br />
+            Toggle between the modes using the <span style="color:var(--mud-palette-primary);">Design Mode</span> switch.<br />
+        </MudText>
+        <MudText Typo="Typo.h6" Color="Color.Secondary">
+            Moving Start/Finish
+        </MudText>
+        <MudText Typo="Typo.body2">
+            You can move the Start or the Finish cell. By clicking and dragging it.<br />
+            It can be placed in any cell that isn't in a Wall/Start/Finish cell.
+        </MudText>
+        <MudText Typo="Typo.h6" Color="Color.Success">
+           Place Walls
+        </MudText>
+        <MudText Typo="Typo.body2">
+            To place walls either:
+            <ul style="list-style:inside;">
+                <li>Click on an empty cell to turn it into a wall and vice versa.</li>
+                <li>Click on an empty cell then drag around the other empty cells to turn them into a wall and vice versa.</li>
+                <li>Click on <span style="color:var(--mud-palette-success)">Create Walls <MudIcon Icon="fas fa-magic fa-xs"/></span> to generate a wall maze.</li>
+            </ul>
+        </MudText>
+        <MudText Typo="Typo.h6" Color="Color.Surface">
+            Changing Rows and Columns
+        </MudText>
+        <MudText Typo="Typo.body2">
+            Set the desired number of: 
+            <ul style="list-style:inside;">
+                <li>Rows <sup style="font-weight:100;">(Min:10 - Max:30)</sup></li>
+                <li>Columns <sup style="font-weight:100;">(Min:20 - Max:50)</sup></li>
+            </ul>
+            Then click on <span style="color:var(--mud-palette-warning)">Regenerate <MudIcon Icon="fas fa-th fa-xs" /></span> to create a new grid with the new settings.<br/>
+            You can also hold <b>Shift + MouseWheel</b> after selecting the field to change the values.
+            
+        </MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Close" Color="Color.Primary">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    void Close() => MudDialog.Cancel();
+}

@@ -1,0 +1,22 @@
+﻿@using PortfolioBlazorWasm.Components
+@inherits TestContext;
+@using System.Text.RegularExpressions;
+
+@code {
+	[Fact]
+	public void CodeBlockHighlight_RendersUnescapedStrings()
+	{
+		// Arrange
+		string codeChildContent = "@code {\r    private int callsMade;\r    private bool overCallLimit { get => callsMade >= 10; }\r    //fact retrieved per call to the service\r    private FactDto fact = new FactDto();\r    //just for displaying the stores session on the table\r    private List<FactDto> sessionStoredFacts = new List<FactDto>();\r    private bool _fixedHeader { get; set; } = true;\r\r    protected override async Task OnInitializedAsync()\r    {\r        fact = await _factsApiClient.GetFactAsync();\r        sessionStoredFacts = await _factsApiClient.GetFactsFromSessionStorage();\r        callsMade = await _factsApiClient.GetCallsMadeFromSessionStorage();\r    }\r    private async Task GetRandomFact()\r    {\r        fact = await _factsApiClient.GetFactAsync();\r        sessionStoredFacts = await _factsApiClient.GetFactsFromSessionStorage();\r        callsMade = await _factsApiClient.GetCallsMadeFromSessionStorage();\r    }\r}";
+		var expectedString = Regex.Unescape(codeChildContent);
+
+		using var ctx = new TestContext();
+		ctx.JSInterop.SetupVoid("highlightSnippet");
+
+		// Act
+		var cut = ctx.Render(@<CodeBlockHighlight>@codeChildContent</CodeBlockHighlight>);
+
+		// Assert
+		cut.Find("pre").MarkupMatches(@<pre class ="code"><code>@expectedString</code></pre>);
+	}
+}

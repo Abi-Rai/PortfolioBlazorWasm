@@ -1,0 +1,219 @@
+﻿.grid-container td {
+    width: 25px;
+    height: 25px;
+    max-width: 25px;
+    outline: 1px dashed rgb(175, 216, 248);
+    text-align: center;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.mud-chip > .mud-chip-content {
+    width: 110px;
+    justify-content: center;
+}
+
+.grid-container {
+    /*max-width: 100vw;*/
+    width: max-content;
+    margin-left: calc(50% - 40vw);
+}
+
+.visited-node-endingframe {
+    border: inherit;
+    background-color: #b34545;
+}
+
+.visited-node-slow {
+    will-change: transform, background-color,border-radius;
+    border: 1px solid #afe8f8;
+    animation-name: visitedAnimationSlow;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+}
+
+@keyframes visitedAnimationSlow {
+    0% {
+        transform: scale(.3) translateZ(0);
+        background-color: #dff716;
+        border-radius: 100%;
+        border-block-color: black;
+    }
+
+    25% {
+        background-color: #e4ff00;
+    }
+
+    50% {
+        background-color: #fbc603;
+    }
+
+    75% {
+        transform: scale(1.2) translateZ(0);
+        background-color: #ef8c10;
+    }
+
+    100% {
+        transform: scale(1.0) translateZ(0);
+        background-color: #b34545;
+    }
+}
+
+.visited-node-medium {
+    will-change: transform, background-color,border-radius;
+    border: 1px solid #afe8f8;
+    animation-name: visitedAnimationMedium;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+}
+
+@keyframes visitedAnimationMedium {
+    0% {
+        transform: scale(.3) translateZ(0);
+        background-color: #dff716;
+        border-radius: 100%;
+    }
+
+    50% {
+        background-color: #fbc603;
+    }
+
+    100% {
+        transform: scale(1.0) translateZ(0);
+        background-color: #b34545;
+    }
+}
+
+.visited-node-fast {
+    border: 1px solid #afe8f8;
+    background-color: #b34545;
+}
+
+.shortest-path-node {
+    will-change: transform, background-color;
+    animation-name: shortestPath;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+}
+
+@keyframes shortestPath {
+    0% {
+        transform: scale(0.6);
+        background-color: #88dae1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        background-color: #38e5b5;
+    }
+
+    100% {
+        transform: scale(1);
+        background-color: #60d646;
+    }
+}
+
+.start-node {
+    background-image: url(../images/pathfinding/start-marker.svg);
+    background-color: rgb(175, 216, 248);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.finish-node {
+    background-image: url(../images/pathfinding/finish-marker.svg);
+    background-color: rgb(175, 216, 248);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.wall-node-light, .wall-node-light-animated{
+    background-color: #191b29;
+}
+.wall-node-dark, .wall-node-dark-animated {
+    background-color: #4053db;
+}
+.wall-node-light-animated, .wall-node-dark-animated {
+    will-change: transform;
+    animation-name: growWall;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+@keyframes growWall {
+    0% {
+        transform: scale(1.5);
+    }
+    50%{
+        transform:scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+ /*TODO: currently not animating none nodes*/
+/*.none-node {
+    animation-name: shrinkNone;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+@keyframes shrinkNone {
+    0% {
+        transform: scale(0.6);
+    }
+
+    50% {
+        transform: scale(0.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}*/
+
+/*Drag drop */
+.draggable-node {
+    cursor: grab !important;
+}
+
+    .draggable-node:active {
+        cursor: grabbing !important;
+    }
+
+.not-draggable-node {
+    cursor: default;
+}
+
+.not-allowed-node {
+    cursor: not-allowed;
+}
+
+.no-drop {
+    border: 2px dashed red;
+}
+
+.can-drop {
+    scale: 1.3;
+    cursor: move;
+    border: 5px solid green;
+}
+
+.not-droppable {
+    cursor: no-drop !important;
+    border: 5px solid red;
+}

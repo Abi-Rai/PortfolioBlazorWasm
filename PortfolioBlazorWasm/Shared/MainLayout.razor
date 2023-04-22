@@ -1,0 +1,85 @@
+﻿@using PortfolioBlazorWasm.Components.SvgLogos;
+@inherits LayoutComponentBase
+@inject IJSRuntime _jsRunTime;
+
+<MudThemeProvider @ref="@_mudThemeProvider" Theme="_customTheme" @bind-IsDarkMode="_isDarkMode" />
+<MudDialogProvider FullWidth="true"
+                   MaxWidth="MaxWidth.Medium"
+                   CloseButton="true"
+                   DisableBackdropClick="true"
+                   NoHeader="true"
+                   Position="DialogPosition.Center"
+                   CloseOnEscapeKey="true" />
+<MudSnackbarProvider />
+<MudLayout>
+    <MudAppBar Elevation="6" Dense="true">
+        <MudToggleIconButton Toggled="_mudDrawerOpen" ToggledChanged="MudDrawerToggle"
+                             Icon="@Icons.Material.Filled.Menu" Title="Open Navigation Menu" 
+                             ToggledIcon="@Icons.Material.Filled.Close" ToggledTitle="Closer Navigation Menu" Edge="Edge.False" />
+        <RaiSvgLogo Width="50" Height="40"/>
+        <MudSpacer />
+        <MudToggleIconButton Toggled="_isDarkMode" ToggledChanged="OnToggleDarkMode"
+                             Icon="@Icons.Material.Filled.DarkMode" Title="Switch to Dark Mode" Style="color:#162ab7"
+                             ToggledIcon="@Icons.Material.Filled.WbSunny" ToggledTitle="Switch to Light Mode" ToggledColor="@Color.Warning" Edge="Edge.False" />
+        <MudIcon Icon=""></MudIcon>
+    </MudAppBar>
+    <MudDrawer @bind-Open="@_mudDrawerOpen" Elevation="1" ClipMode="DrawerClipMode.Docked">
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-6 mb-10">
+            <CascadingValue Value="@_mudThemeProvider">
+            @Body
+            </CascadingValue>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code
+{
+    private bool _isDarkMode = false;
+    private bool _mudDrawerOpen = true;
+    private MudThemeProvider? _mudThemeProvider = new();
+    private readonly MudTheme _customTheme = new()
+        {
+            Palette = new PaletteLight()
+            {
+                DrawerBackground = "#ffffffff",
+                Surface = "#ffffffff",
+                AppbarBackground = "#594ae2cc",
+            },
+            PaletteDark = new PaletteDark()
+            {
+                DrawerBackground = "#27272fff",
+                Surface = "#373740ff",
+                AppbarBackground = "#27272fcc",
+            }
+        };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            _isDarkMode = await _mudThemeProvider!.GetSystemPreference();
+            await _jsRunTime.InvokeAsync<Task>("themeIsDark", _isDarkMode);
+            await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
+            StateHasChanged();
+        }
+    }
+    private async Task OnToggleDarkMode(bool isDark)
+    {
+        _isDarkMode = isDark;
+        await _jsRunTime.InvokeAsync<Task>("themeIsDark", _isDarkMode);
+    }
+    private async Task OnSystemPreferenceChanged(bool newValue)
+    {
+        await Task.Run(() => OnToggleDarkMode(newValue));
+        StateHasChanged();
+    }
+    private void MudDrawerToggle(bool isOpen)
+    {
+        _mudDrawerOpen = isOpen;
+    }
+}
+

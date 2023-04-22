@@ -1,0 +1,22 @@
+﻿.grow-cell {
+    transition: all .2s ease-in-out;
+}
+
+    .grow-cell:hover {
+        transform: scale(1.1);
+    }
+
+.timeline-load {
+    transition: all .2s ease-in-out;
+    animation: rollout 0.4s;
+}
+
+@keyframes rollout {
+    0% {
+        transform: translateY(-50px);
+    }
+
+    100% {
+        transform: none;
+    }
+}

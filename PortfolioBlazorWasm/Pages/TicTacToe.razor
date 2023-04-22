@@ -1,0 +1,105 @@
+﻿@page "/tictactoe"
+<PageTitle>TicTacToe</PageTitle>
+@using PortfolioBlazorWasm.Models.TicTacToe.Settings;
+@using PortfolioBlazorWasm.Components.TicTacToe;
+@using PortfolioBlazorWasm.Services.TicTacToeService;
+
+@inject ISnackbar SnackBarService;
+@inject IDialogService DialogService;
+
+<MudPaper Class="pa-4" Style="position: relative;z-index: 0;">
+    <MudText Typo="Typo.h3" Align="Align.Center">Tic-Tac-Toe</MudText>
+    @if (_gameBoard is not null)
+    {
+        <MudPaper Width="350px" Style="margin:auto;position: relative;z-index: -20;">
+            <MudText Align="Align.Center" Typo="Typo.h5">
+                <MudText Typo="Typo.h4" Style=@($"color:{_gameBoard.GetCurrentPlayer().CellColorValue}")>
+                    (@_gameBoard.GetCurrentPlayer().Marker)
+                </MudText>
+                @(
+                    $"{(_gameBoard.GameOver ? "Game Over" : $"{_gameBoard.GetCurrentPlayer().Name}")}"
+                    )<br /> <b>@GetGameState()</b>
+            </MudText>
+        </MudPaper>
+        @if (_gameBoard.IsWon)
+        {
+            <FireworksAnimation />
+        }
+        <MudDivider DividerType="DividerType.Middle" Class="my-6" />
+        <MudGrid Spacing="0" Justify="Justify.Center">
+            @for (int i = 0; i < _gameBoard.RowLength; i++)
+            {
+                int x = i;
+                <MudItem Style="padding:0.9px">
+                    @for (int j = 0; j < _gameBoard.RowLength; j++)
+                    {
+                        int y = j;
+                        int cellIndex = _gameBoard.PointSelector[(x, y)];
+                        <MudPaper Height="60px" Width="60px"
+                      Square="true" Outlined="false" Elevation="4"
+                      Class=@($"d-flex align-center justify-center {GetCursorStyle(cellIndex)}")
+                      Style=@($"overflow:clip;{GetCellStyle(cellIndex)}")
+                      @onclick="@(()=>ValidateAndMakeMove(cellIndex))">
+                            <MudText Align="Align.Center">
+                                @_gameBoard.GetCell(cellIndex).ValueStr
+                            </MudText>
+                        </MudPaper>
+                    }
+                </MudItem>
+            }
+        </MudGrid>
+        <MudDivider DividerType="DividerType.Middle" Class="my-6" />
+        <MudStack>
+            <MudPaper Elevation="1">
+                <MudText Typo="Typo.h6" Align="Align.Center">Settings</MudText>
+                <MudPaper Elevation="0" Style="background-color:transparent" Class="pa-4">
+                    <MudStack Row="true" Spacing="2" Justify="Justify.SpaceBetween">
+                        <MudPaper Elevation="5" MinWidth="190px" MinHeight="38px">
+                            <MudButton Variant="@(_gameBoard.GameOver?Variant.Filled:Variant.Text)" StartIcon="@Icons.Material.Filled.RestartAlt" Color="Color.Info" OnClick="()=>ResetGame()" ButtonType="ButtonType.Reset" FullWidth="true">Restart Game</MudButton>
+                        </MudPaper>
+                        <MudPaper Elevation="5" MinWidth="230px" MinHeight="38px">
+                            <MudSwitch @bind-Checked="@_showHistory" Label="Display move history" Color="Color.Info" LabelPosition="LabelPosition.End" ThumbIcon="@Icons.Material.Filled.ManageHistory" ThumbIconColor="Color.Tertiary" Style="padding-left:5px" Size="Size.Medium" />
+                        </MudPaper>
+                    </MudStack>
+                </MudPaper>
+                <MudPaper Elevation="0" Style="background-color:transparent" Class="pa-4">
+                    <MudPaper Elevation="1" Style="background-color:transparent"></MudPaper>
+                    <MudStack Row="true" Spacing="2" Justify="Justify.SpaceBetween">
+                        <MudPaper Elevation="@(_gameNotStarted ? 5:0)" MinWidth="190px" MinHeight="38px">
+                            <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Person" Color="Color.Info" OnClick="@(() => ShowSettings())" ButtonType="ButtonType.Reset" FullWidth="true" Disabled="!_gameNotStarted">Change Settings</MudButton>
+                        </MudPaper>
+                        <MudPaper Elevation="@(_gameNotStarted ? 5:0)" MinWidth="230px" MinHeight="38px">
+                            <MudTooltip Duration="1000" Text="Only when player one starts first">
+                                <MudSwitch @bind-Checked="@_playWithComputer" Label="Play against computer" Color="Color.Info" LabelPosition="LabelPosition.End" ThumbIcon="@Icons.Material.Filled.Computer" ThumbIconColor="Color.Tertiary" Style="padding-left:5px" Size="Size.Medium" Disabled="(!_gameNotStarted || _gameBoard.PlayerTwoStarting)" />
+                            </MudTooltip>
+                        </MudPaper>
+                    </MudStack>
+                </MudPaper>
+            </MudPaper>
+        </MudStack>
+        <MudDivider DividerType="DividerType.Middle" Class="my-6" />
+        @if (_showHistory)
+        {
+            <MudTimeline Class="timeline-load">
+                @for (int i = 0; i < _gameBoard.MoveHistory.Count; i++)
+                {
+                    var turn = i; // needs to be redeclared because of C# Feature Closure Capture
+                    var move = _gameBoard.MoveHistory[turn];
+                    <MudTimelineItem Color="GetTimeLineColor(turn)" Size="Size.Small" Variant="Variant.Outlined">
+                        <ItemOpposite>
+                            <MudText Typo="Typo.h6" Style=@($"color:{_gameBoard.GetCellColorValue(move.CellIndex)}") Color="@GetTimeLineTextColor(move.CellIndex)">@move.PlayerMarker</MudText>
+                        </ItemOpposite>
+                        <ItemContent>
+                            <MudText Color="@GetTimeLineTextColor(move.CellIndex)" Typo="Typo.body2">@move.MoveLog</MudText>
+                        </ItemContent>
+                    </MudTimelineItem>
+                }
+            </MudTimeline>
+        }
+    }
+    else
+    {
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+    }
+</MudPaper>
+
