@@ -1,5 +1,5 @@
-let dark = '/js/highlight/styles/monokai.min.css';
-let light = '/js/highlight/styles/stackoverflow-light.min.css';
+let dark = 'js/highlight/styles/monokai.min.css';
+let light = 'js/highlight/styles/stackoverflow-light.min.css';
 window.themeIsDark = function (isDark) {
     if (isDark) {
         document.getElementById("theme").href = dark;
