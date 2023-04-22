@@ -6,7 +6,7 @@ I built this application to learn Blazor.
 
 ## Live demo
 
-Github Pages : 
+Github Pages :
 
 ## Pages
 
