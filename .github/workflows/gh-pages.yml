@@ -1,0 +1,40 @@
+name: github pages
+# Run workflow on every push to the master branch
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  deploy-to-github-pages:
+    # use ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+    # Checkout the code
+    - uses: actions/checkout@v1
+    # sets up .NET Core SDK 7.0.x
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v3.0.3
+      with:
+        dotnet-version: 7.0.x
+        
+    # Install dotnet wasm buildtools workload
+    - name: Install .NET WASM Build Tools
+      run: dotnet workload install wasm-tools
+
+    # Publishes Blazor project to the dist/Web -folder
+    - name: Publish .NET Core Project
+      run: dotnet publish PortfolioBlazorWasm/PortfolioBlazorWasm.csproj -c:Release -p:GHPages=true -o dist/Web --nologo
+      
+    # changes the base-tag in index.html from '/' to 'PortfolioBlazorWasm' to match GitHub Pages repository subdirectory
+    - name: Change base-tag in index.html from / to PortfolioBlazorWasm
+      run: sed -i 's/<base href="\/" \/>/<base href="\/PortfolioBlazorWasm\/" \/>/g' dist/Web/wwwroot/index.html
+    
+    - name: Commit wwwroot to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@3.7.1
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: dist/Web/wwwroot
