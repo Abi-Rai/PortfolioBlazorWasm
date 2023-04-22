@@ -506,14 +506,14 @@
 }
 
 .start-node[b-2ytr6hl5ez] {
-    background-image: url(../images/pathfinding/start-marker.svg);
+    background-image: url(images/pathfinding/start-marker.svg);
     background-color: rgb(175, 216, 248);
     background-position: center;
     background-repeat: no-repeat;
 }
 
 .finish-node[b-2ytr6hl5ez] {
-    background-image: url(../images/pathfinding/finish-marker.svg);
+    background-image: url(images/pathfinding/finish-marker.svg);
     background-color: rgb(175, 216, 248);
     background-position: center;
     background-repeat: no-repeat;
