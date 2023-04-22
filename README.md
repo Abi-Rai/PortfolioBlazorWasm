@@ -4,6 +4,10 @@ I built this application to learn Blazor.
 
 `Blazor Webassembly version 7.0.4, .NET 7.0`
 
+## Live demo
+
+Github Pages : 
+
 ## Pages
 
 The project contains different types of pages where each page addresses some of the core web development framework concepts such as:
@@ -13,13 +17,9 @@ The project contains different types of pages where each page addresses some of 
 - Testing
 - Routing
 
-## Live demo
+## Running locally
 
-Github pages hosted : 
-
-## Testing locally
-
- #### Visual Studio 2022
+### Visual Studio 2022
 
 ```
 1. Clone the repository 
@@ -27,9 +27,10 @@ Github pages hosted :
 3. Set startup project as PortfolioBlazorWasm
 4. Build and run the project
 ```
- #### Docker Desktop
 
-> To build image & run the container
+### Docker Desktop
+
+To build image & run the container
   
 ```shell
 cd PortfolioBlazorWasm
@@ -37,11 +38,12 @@ docker-compose up --build
 ```
 After it finishes building, the site will be live on `localhost:8080`
 
-`Ctrl+C` to stop the container.
 
-To delete the container.
+>`Ctrl + C` to stop the container.
+
+Then to delete the container.
 ```shell
-docker-compose down
+ docker-compose down
 ```
 
 ## Credits
