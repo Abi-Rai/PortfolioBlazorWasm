@@ -135,15 +135,29 @@ public partial class TicTacToe
     {
         if (_gameBoard.IsDraw)
         {
-            return "Game is a Draw";
+            return "Game is a Draw!";
         }
 
         if (_gameBoard.IsWon)
         {
-            return $"{_gameBoard.GetCurrentPlayer().Name} Won";
+            return $"{_gameBoard.GetCurrentPlayer().Name} Won!";
         }
 
         return "Turn";
+    }
+
+    private string GetGameStateStyle()
+    {
+        if (_gameBoard.IsDraw)
+        {
+            return "color:#ff0707";
+        }
+
+        if (_gameBoard.IsWon)
+        {
+            return $"color:{_gameBoard.GetCurrentPlayer().CellColorValue};";
+        }
+        return "";
     }
 
     private void RemoveSnackbar()

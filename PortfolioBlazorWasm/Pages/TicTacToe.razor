@@ -17,9 +17,28 @@
                 <MudText Typo="Typo.h4" Style=@($"color:{_gameBoard.GetCurrentPlayer().CellColorValue}")>
                     (@_gameBoard.GetCurrentPlayer().Marker)
                 </MudText>
-                @(
-                    $"{(_gameBoard.GameOver ? "Game Over" : $"{_gameBoard.GetCurrentPlayer().Name}")}"
-                    )<br /> <b>@GetGameState()</b>
+                @{
+                    if (_gameBoard.IsDraw)
+                    {
+                        <MudText Style="color:#ff0707;" Align="Align.Center" Typo="Typo.h5">
+                            <b> Game is a<br /> Draw! </b>
+                            <br />
+                            <MudIcon Icon="fas fa-skull-crossbones fa-lg" />
+                        </MudText>
+                    }
+                    else if (_gameBoard.IsWon)
+                    {
+                        <MudText Style=@($"color:{_gameBoard.GetCurrentPlayer().CellColorValue};") Align="Align.Center" Typo="Typo.h5">
+                            <b>@_gameBoard.GetCurrentPlayer().Name <br> Won!</b>
+                            <br />
+                            <MudIcon Icon="fas fa-glass-cheers fa-lg" />
+                        </MudText>
+                    }
+                    else
+                    {
+                        <MudText Align="Align.Center" Typo="Typo.h5">@_gameBoard.GetCurrentPlayer().Name<br /> Turn!</MudText>
+                    }
+                }
             </MudText>
         </MudPaper>
         @if (_gameBoard.IsWon)
@@ -38,10 +57,10 @@
                         int cellIndex = _gameBoard.PointSelector[(x, y)];
                         <MudPaper Height="60px" Width="60px"
                       Square="true" Outlined="false" Elevation="4"
-                      Class=@($"d-flex align-center justify-center {GetCursorStyle(cellIndex)}")
+                      Class=@($"normal-cell d-flex align-center justify-center {GetCursorStyle(cellIndex)}")
                       Style=@($"overflow:clip;{GetCellStyle(cellIndex)}")
                       @onclick="@(()=>ValidateAndMakeMove(cellIndex))">
-                            <MudText Align="Align.Center">
+                            <MudText Align="Align.Center" Class="cell-marker-text">
                                 @_gameBoard.GetCell(cellIndex).ValueStr
                             </MudText>
                         </MudPaper>
@@ -50,34 +69,30 @@
             }
         </MudGrid>
         <MudDivider DividerType="DividerType.Middle" Class="my-6" />
-        <MudStack>
-            <MudPaper Elevation="1">
-                <MudText Typo="Typo.h6" Align="Align.Center">Settings</MudText>
-                <MudPaper Elevation="0" Style="background-color:transparent" Class="pa-4">
-                    <MudStack Row="true" Spacing="2" Justify="Justify.SpaceBetween">
-                        <MudPaper Elevation="5" MinWidth="190px" MinHeight="38px">
-                            <MudButton Variant="@(_gameBoard.GameOver?Variant.Filled:Variant.Text)" StartIcon="@Icons.Material.Filled.RestartAlt" Color="Color.Info" OnClick="()=>ResetGame()" ButtonType="ButtonType.Reset" FullWidth="true">Restart Game</MudButton>
-                        </MudPaper>
-                        <MudPaper Elevation="5" MinWidth="230px" MinHeight="38px">
-                            <MudSwitch @bind-Checked="@_showHistory" Label="Display move history" Color="Color.Info" LabelPosition="LabelPosition.End" ThumbIcon="@Icons.Material.Filled.ManageHistory" ThumbIconColor="Color.Tertiary" Style="padding-left:5px" Size="Size.Medium" />
-                        </MudPaper>
-                    </MudStack>
-                </MudPaper>
-                <MudPaper Elevation="0" Style="background-color:transparent" Class="pa-4">
-                    <MudPaper Elevation="1" Style="background-color:transparent"></MudPaper>
-                    <MudStack Row="true" Spacing="2" Justify="Justify.SpaceBetween">
-                        <MudPaper Elevation="@(_gameNotStarted ? 5:0)" MinWidth="190px" MinHeight="38px">
-                            <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Person" Color="Color.Info" OnClick="@(() => ShowSettings())" ButtonType="ButtonType.Reset" FullWidth="true" Disabled="!_gameNotStarted">Change Settings</MudButton>
-                        </MudPaper>
-                        <MudPaper Elevation="@(_gameNotStarted ? 5:0)" MinWidth="230px" MinHeight="38px">
-                            <MudTooltip Duration="1000" Text="Only when player one starts first">
-                                <MudSwitch @bind-Checked="@_playWithComputer" Label="Play against computer" Color="Color.Info" LabelPosition="LabelPosition.End" ThumbIcon="@Icons.Material.Filled.Computer" ThumbIconColor="Color.Tertiary" Style="padding-left:5px" Size="Size.Medium" Disabled="(!_gameNotStarted || _gameBoard.PlayerTwoStarting)" />
-                            </MudTooltip>
-                        </MudPaper>
-                    </MudStack>
-                </MudPaper>
-            </MudPaper>
-        </MudStack>
+        <MudPaper Class="pa-2">
+            <MudGrid Spacing="2" Justify="Justify.Center">
+                <MudItem sm="12" xs="12" Style="left:20px;display: flex;align-items: center;justify-content: center;">
+                    <MudIcon Icon="fas fa-tools fa-lg" Color="Color.Surface" Size="Size.Large" Style="border:1px solid var(--mud-palette-text-primary);height:30px;width:30px;align-items:center;display: flex;border-radius:50px;justify-content:center;box-shadow: 0px 0px 3px 1px black;" />
+                </MudItem>
+                <MudItem xs="12" sm="6" Style="display: flex;align-items: center;justify-content: center; width:240px;">
+                    <MudButton Variant="Variant.Outlined" StartIcon="fas fa-undo-alt fa-xs" Color="Color.Info" OnClick="()=>ResetGame()" ButtonType="ButtonType.Reset" Size="Size.Small" Style="width:187px;height:32px;left:-5px;">Restart Game</MudButton>
+                </MudItem>
+                <MudItem xs="12" sm="6" Style="display: flex;align-items: center;justify-content: center;">
+                    <MudSwitch @bind-Checked="@_showHistory" Color="Color.Tertiary" LabelPosition="LabelPosition.Start" Size="Size.Small" Style="width:240px;">
+                        <MudChip Label="true" Color="@(_showHistory?Color.Tertiary:Color.Surface)" Style="cursor:pointer;width:187px;" Variant="Variant.Outlined" Icon="fas fa-history fa-lg">Display move history</MudChip>
+                    </MudSwitch>
+                </MudItem>
+                <MudItem xs="12" sm="6" Style="display: flex;align-items: center;justify-content: center;">
+                    <MudButton Variant="Variant.Outlined" StartIcon="fas fa-user-cog fa-xs" Color="Color.Info" OnClick="@(() => ShowSettings())" ButtonType="ButtonType.Reset" FullWidth="false" Size="Size.Small" Disabled="!_gameNotStarted" Style="width:187px;height:32px;left:-5px;">Change Settings</MudButton>
+                </MudItem>
+                <MudItem xs="12" sm="6" Style="display: flex;align-items: center;justify-content: center;">
+                    <MudSwitch @bind-Checked="@_playWithComputer" Color="Color.Info" LabelPosition="LabelPosition.Start" Size="Size.Small" Disabled="(!_gameNotStarted || _gameBoard.PlayerTwoStarting)" Style="width:240px;">
+                        <MudChip Label="true" Color="@(_playWithComputer?Color.Tertiary:Color.Surface)" Style="cursor:pointer;width:187px;" Variant="Variant.Outlined" Icon="fas fa-robot fa-lg">Play against computer </MudChip>
+                    </MudSwitch>
+                </MudItem>
+
+            </MudGrid>
+        </MudPaper>
         <MudDivider DividerType="DividerType.Middle" Class="my-6" />
         @if (_showHistory)
         {

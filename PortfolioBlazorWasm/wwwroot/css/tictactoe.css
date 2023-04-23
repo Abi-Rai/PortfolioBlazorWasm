@@ -6,9 +6,19 @@
         transform: scale(1.1);
     }
 
+.normal-cell {
+    transition-property: background-color, color;
+    transition-duration: .3s;
+    transition-timing-function: ease-in-out;
+}
+
+.cell-marker-text {
+    font-weight: 700;
+}
+
 .timeline-load {
-    transition: all .2s ease-in-out;
-    animation: rollout 0.4s;
+    transition: all 1s ease-in-out;
+    animation: rollout 1s;
 }
 
 @keyframes rollout {
