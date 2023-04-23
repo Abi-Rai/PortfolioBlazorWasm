@@ -383,7 +383,6 @@
     display: grid;
     gap: 0px;
     justify-content: center;
-    
 }
 
 .grid-container .grid-row[b-2ytr6hl5ez] {
@@ -401,6 +400,7 @@
     width: 110px;
     justify-content: center;
 }
+
 .visited-node-endingframe[b-2ytr6hl5ez] {
     border: inherit;
     background-color: #b34545;
@@ -524,31 +524,36 @@
     background-repeat: no-repeat;
 }
 
-.wall-node-light[b-2ytr6hl5ez], .wall-node-light-animated[b-2ytr6hl5ez]{
+.wall-node-light[b-2ytr6hl5ez], .wall-node-light-animated[b-2ytr6hl5ez] {
     background-color: #191b29;
 }
+
 .wall-node-dark[b-2ytr6hl5ez], .wall-node-dark-animated[b-2ytr6hl5ez] {
     background-color: #4053db;
 }
+
 .wall-node-light-animated[b-2ytr6hl5ez], .wall-node-dark-animated[b-2ytr6hl5ez] {
     will-change: transform;
     animation-name: growWall-b-2ytr6hl5ez;
     animation-duration: 1s;
     animation-fill-mode: forwards;
 }
+
 @keyframes growWall-b-2ytr6hl5ez {
     0% {
         transform: scale(1.5);
     }
-    50%{
-        transform:scale(1.2);
+
+    50% {
+        transform: scale(1.2);
     }
+
     100% {
         transform: scale(1);
     }
 }
 
- /*TODO: currently not animating none nodes*/
+/*TODO: currently not animating none nodes*/
 /*.none-node {
     animation-name: shrinkNone;
     animation-duration: 1s;
@@ -599,6 +604,34 @@
     cursor: no-drop !important;
     border: 5px solid red;
 }
+/* /Pages/RandomFact.razor.rz.scp.css */
+ol[b-ge1co8re22] {
+    counter-reset: item;
+    padding-left:2rem;
+}
+
+ol > li[b-ge1co8re22] {
+    display: block;
+}
+
+    ol > li[b-ge1co8re22]:before {
+        content: counters(item, ".") ". ";
+        counter-increment: item;
+    }
+
+code[b-ge1co8re22] {
+    font-family: 'Roboto Mono', monospace;
+    font-size: inherit;
+}
+
+p > code[b-ge1co8re22],
+li > code[b-ge1co8re22]{
+    background: var(--mud-palette-action-disabled-background);
+    word-wrap: break-word;
+    box-decoration-break: clone;
+    padding: 0rem .2rem .0rem .2rem;
+    border-radius: .2rem;
+}
 /* /Pages/Themeing.razor.rz.scp.css */
 code[b-4qmcsb379l] {
     font-family: 'Roboto Mono', monospace;
@@ -606,13 +639,11 @@ code[b-4qmcsb379l] {
 }
 
 p > code[b-4qmcsb379l],
-li > code[b-4qmcsb379l],
-dd > code[b-4qmcsb379l],
-td > code[b-4qmcsb379l] {
+li > code[b-4qmcsb379l] {
     background: var(--mud-palette-action-disabled-background);
     word-wrap: break-word;
     box-decoration-break: clone;
-    padding: .1rem .3rem .2rem .2rem;
+    padding: 0rem .2rem .0rem .2rem;
     border-radius: .2rem;
 }
 /* /Shared/MainLayout.razor.rz.scp.css */
