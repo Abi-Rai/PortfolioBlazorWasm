@@ -21,7 +21,7 @@
         <MudToggleIconButton Toggled="_isDarkMode" ToggledChanged="OnToggleDarkMode"
                              Icon="@Icons.Material.Filled.DarkMode" Title="Switch to Dark Mode" Style="color:#162ab7"
                              ToggledIcon="@Icons.Material.Filled.WbSunny" ToggledTitle="Switch to Light Mode" ToggledColor="@Color.Warning" Edge="Edge.False" />
-        <MudIcon Icon=""></MudIcon>
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Success" aria-label="github" Href="https://github.com/Abi-Rai/PortfolioBlazorWasm" Target="_blank" Title="GitHub Repository"></MudIconButton>
     </MudAppBar>
     <MudDrawer @bind-Open="@_mudDrawerOpen" Elevation="1" ClipMode="DrawerClipMode.Docked">
         <NavMenu />
