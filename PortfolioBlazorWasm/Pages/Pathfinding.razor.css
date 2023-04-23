@@ -6,7 +6,6 @@
     display: grid;
     gap: 0px;
     justify-content: center;
-    
 }
 
 .grid-container .grid-row {
@@ -24,6 +23,7 @@
     width: 110px;
     justify-content: center;
 }
+
 .visited-node-endingframe {
     border: inherit;
     background-color: #b34545;
@@ -147,31 +147,36 @@
     background-repeat: no-repeat;
 }
 
-.wall-node-light, .wall-node-light-animated{
+.wall-node-light, .wall-node-light-animated {
     background-color: #191b29;
 }
+
 .wall-node-dark, .wall-node-dark-animated {
     background-color: #4053db;
 }
+
 .wall-node-light-animated, .wall-node-dark-animated {
     will-change: transform;
     animation-name: growWall;
     animation-duration: 1s;
     animation-fill-mode: forwards;
 }
+
 @keyframes growWall {
     0% {
         transform: scale(1.5);
     }
-    50%{
-        transform:scale(1.2);
+
+    50% {
+        transform: scale(1.2);
     }
+
     100% {
         transform: scale(1);
     }
 }
 
- /*TODO: currently not animating none nodes*/
+/*TODO: currently not animating none nodes*/
 /*.none-node {
     animation-name: shrinkNone;
     animation-duration: 1s;

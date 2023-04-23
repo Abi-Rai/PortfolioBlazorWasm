@@ -1,9 +1,15 @@
+using Microsoft.AspNetCore.Components;
 using PortfolioBlazorWasm.Models.FactsApi;
+using PortfolioBlazorWasm.Services.FactsApiService;
+using PortfolioBlazorWasm.Services.SessionStorageService;
 
 namespace PortfolioBlazorWasm.Pages;
 
 public partial class RandomFact
 {
+    [Inject] public IFactsApiClient FactsApiClient { get; set; }
+    [Inject] public ISessionStorageService SessionStorageService { get; set; }
+
     private int _callsMade;
     private bool _overCallLimit { get => _callsMade >= 10; }
 
@@ -20,17 +26,17 @@ public partial class RandomFact
         await base.OnAfterRenderAsync(firstRender);
         if (firstRender)
         {
-            _sessionStoredFacts = await _sessionStorageService.GetFactsFromSessionStorage();
-            _callsMade = await _sessionStorageService.GetCallsMadeFromSessionStorage();
-            if (_sessionStoredFacts.Count >= 1)
+            _sessionStoredFacts = await SessionStorageService.GetFactsFromSessionStorage();
+            _callsMade = await SessionStorageService.GetCallsMadeFromSessionStorage();
+            if (_sessionStoredFacts.Any())
             {
                 _fact = _sessionStoredFacts.Last();
             }
             else
             {
-                _fact = await _factsApiClient.GetFactAsync();
-                _sessionStoredFacts = await _sessionStorageService.GetFactsFromSessionStorage();
-                _callsMade = await _sessionStorageService.GetCallsMadeFromSessionStorage();
+                _fact = await FactsApiClient.GetFactAsync();
+                _sessionStoredFacts = await SessionStorageService.GetFactsFromSessionStorage();
+                _callsMade = await SessionStorageService.GetCallsMadeFromSessionStorage();
             }
 
             StateHasChanged();
@@ -39,39 +45,62 @@ public partial class RandomFact
 
     private async Task GetRandomFact()
     {
-        _fact = await _factsApiClient.GetFactAsync();
-        _sessionStoredFacts = await _sessionStorageService.GetFactsFromSessionStorage();
-        _callsMade = await _sessionStorageService.GetCallsMadeFromSessionStorage();
+        _fact = await FactsApiClient.GetFactAsync();
+        _sessionStoredFacts = await SessionStorageService.GetFactsFromSessionStorage();
+        _callsMade = await SessionStorageService.GetCallsMadeFromSessionStorage();
     }
 
     private const string _programDICode = """
         builder.Services.AddSingleton<ISessionStorageService, SessionStorageService>();
         builder.Services.AddHttpClient<IFactsApiClient, FactsApiClient>(client =>
         {
-            client.BaseAddress = new Uri(builder.Configuration[""factsapi""]!);
+            client.BaseAddress = new Uri(builder.Configuration["factsapi"]!);
         });
         """;
     private const string _factRazorComponentCode = """
-         @code {
-            private int callsMade;
-            private bool overCallLimit { get => callsMade >= 10; }
-            //fact retrieved per call to the service
-            private FactDto fact = new FactDto();
-            //just for displaying the stores session on the table
-            private List<FactDto> sessionStoredFacts = new List<FactDto>();
-            private bool _fixedHeader { get; set; } = true;
+        public partial class RandomFact
+        {
+            [Inject] public IFactsApiClient FactsApiClient { get; }
+            [Inject] public ISessionStorageService SessionStorageService { get; }
 
+            private int _callsMade;
+            private bool _overCallLimit { get => _callsMade >= 10; }
+
+            private FactDto? _fact;
+            private List<FactDto>? _sessionStoredFacts;
+            private bool _fixedHeader = true;
             protected override async Task OnInitializedAsync()
             {
-                fact = await _factsApiClient.GetFactAsync();
-                sessionStoredFacts = await _factsApiClient.GetFactsFromSessionStorage();
-                callsMade = await _factsApiClient.GetCallsMadeFromSessionStorage();
+                await base.OnInitializedAsync();
             }
+
+            protected override async Task OnAfterRenderAsync(bool firstRender)
+            {
+                await base.OnAfterRenderAsync(firstRender);
+                if (firstRender)
+                {
+                    _sessionStoredFacts = await SessionStorageService.GetFactsFromSessionStorage();
+                    _callsMade = await SessionStorageService.GetCallsMadeFromSessionStorage();
+                    if (_sessionStoredFacts.Any())
+                    {
+                        _fact = _sessionStoredFacts.Last();
+                    }
+                    else
+                    {
+                        _fact = await FactsApiClient.GetFactAsync();
+                        _sessionStoredFacts = await SessionStorageService.GetFactsFromSessionStorage();
+                        _callsMade = await SessionStorageService.GetCallsMadeFromSessionStorage();
+                    }
+
+                    StateHasChanged();
+                }
+            }
+
             private async Task GetRandomFact()
             {
-                fact = await _factsApiClient.GetFactAsync();
-                sessionStoredFacts = await _factsApiClient.GetFactsFromSessionStorage();
-                callsMade = await _factsApiClient.GetCallsMadeFromSessionStorage();
+                _fact = await FactsApiClient.GetFactAsync();
+                _sessionStoredFacts = await SessionStorageService.GetFactsFromSessionStorage();
+                _callsMade = await SessionStorageService.GetCallsMadeFromSessionStorage();
             }
         }
         """;

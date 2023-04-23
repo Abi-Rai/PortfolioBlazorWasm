@@ -1,16 +1,13 @@
 ﻿@page "/randomfact"
 @using PortfolioBlazorWasm.Components
-@using PortfolioBlazorWasm.Services;
 @using PortfolioBlazorWasm.Models.FactsApi;
-@using PortfolioBlazorWasm.Services.FactsApiService;
-@using PortfolioBlazorWasm.Services.SessionStorageService;
 
-@inject IFactsApiClient _factsApiClient;
-@inject ISessionStorageService _sessionStorageService;
+
+
 
 <PageTitle>Random Fact API</PageTitle>
 <MudPaper Class="pa-4">
-    <MudText Typo="Typo.h6">Data persistance in Blazor WASM</MudText>
+    <MudText Typo="Typo.h5">Data persistance in Blazor WASM</MudText>
     <MudDivider DividerType="DividerType.Middle" />
     <MudGrid>
         <MudItem xs="12">
@@ -67,20 +64,63 @@
             <MudSwitch @bind-Checked="@_fixedHeader">Collapse Table</MudSwitch>
         </MudItem>
         <MudItem xs="12">
-        <MudDivider DividerType="DividerType.Middle" />
+            <MudDivider DividerType="DividerType.Middle" />
+        </MudItem>
+        <MudItem xs="12">
+            <MudPaper Class="pa-2">
+                <MudText Typo="Typo.h6">This is this components life-cycle. <MudIcon Icon="fas fa-recycle fa-rotate-180 fa-xs" Color="Color.Primary" /> </MudText>
+                <MudDivider DividerType="DividerType.Inset" />
+                <MudText Typo="Typo.body2">
+                    <ol style="padding-left:1.5rem;">
+                        <li>
+                            On page first render
+                            <ol>
+                                <li>Try and retrieve stored fact and calls made from session storage</li>
+                                <li>If no fact is found then make external api call</li>
+                                <li>If at least one fact is found in storage then put the last fact in storage on display</li>
+                                <li>Store all facts on table</li>
+                            </ol>
+                        </li>
+                        <li>
+                            Every button click
+                            <ol>
+                                <li>Checks if number of calls made is less than 10</li>
+                                <li>If within limit -> Makes an external API call -> stores retrieved fact & number of calls on session storage </li>
+                                <li>If limit reached -> Retrieves a random fact from the stored facts to put on display</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </MudText>
+            </MudPaper>
         </MudItem>
         <MudItem xs="12">
             <MudText Typo="Typo.body2"> Registering the services</MudText>
             <CodeBlockHighlight HeadingText="program.cs">@_programDICode</CodeBlockHighlight>
         </MudItem>
         <MudItem xs="12">
+            <MudText Typo="Typo.body2">
+                Dependencies injected :
+                <ul style="list-style:circle; padding-left:1.5rem;">
+                    <li><code>HttpClient</code>: We need the base http client to make external api calls.</li>
+                    <li><code>ISessionStorageService</code>: This service deals with retrieval and storage of data to the session storage</li>
+                </ul>
+            </MudText>
             <CodeBlockHighlight HeadingText="FactsApiclient.cs">@_factServiceCode</CodeBlockHighlight>
         </MudItem>
         <MudItem xs="12">
+            <MudText Typo="Typo.body2">
+                Dependencies injected :
+                <ul style="list-style:circle; padding-left:1.5rem;">
+                    <li><code>IJSRuntime</code> : We need the IJsRuntime to use the Web APIs available on the DOM. The session storage is accessible via the <code>sessionStorage</code> property and its <code>getItem</code> and <code>setItem</code> functions.</li>
+                </ul>
+            </MudText>
             <CodeBlockHighlight HeadingText="SessionStorageService.cs">@_sessionSeviceCode</CodeBlockHighlight>
         </MudItem>
         <MudItem xs="12">
-            <CodeBlockHighlight HeadingText="RandomFact.razor">@_factRazorComponentCode</CodeBlockHighlight>
+            <MudText Typo="Typo.body2">
+                Then in the page component. We inject both the <code>FactsApiClient</code> and the <code>SessionStorageService.</code> <br />
+            </MudText>
+            <CodeBlockHighlight HeadingText="RandomFact.razor.cs">@_factRazorComponentCode</CodeBlockHighlight>
         </MudItem>
     </MudGrid>
 </MudPaper>
