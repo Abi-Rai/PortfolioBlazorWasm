@@ -9,9 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortfolioBlazorWasm.Tests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortFolioBlazorWasm.Components.Tests", "PortfolioBlazorWasm.Components.Tests\PortFolioBlazorWasm.Components.Tests.csproj", "{ED12BD30-1CA0-4A66-A3E4-DFF9DE39C6D8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1C34BBD6-DF32-43F5-9835-2F5C301243B4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0F540010-8F26-4EF3-AA46-2853889AB95C}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\gh-pages.yml = .github\workflows\gh-pages.yml
 		README.md = README.md
 	EndProjectSection
 EndProject

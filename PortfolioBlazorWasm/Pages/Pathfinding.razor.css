@@ -1,24 +1,29 @@
-﻿.grid-container td {
+﻿.grid-container {
+    width: 103%;
+}
+
+.grid-table {
+    display: grid;
+    gap: 0px;
+    justify-content: center;
+    
+}
+
+.grid-container .grid-row {
+    display: grid;
+}
+
+.grid-container .grid-col {
     width: 25px;
     height: 25px;
-    max-width: 25px;
     outline: 1px dashed rgb(175, 216, 248);
     text-align: center;
-    overflow: hidden;
-    z-index: 1;
 }
 
 .mud-chip > .mud-chip-content {
     width: 110px;
     justify-content: center;
 }
-
-.grid-container {
-    /*max-width: 100vw;*/
-    width: max-content;
-    margin-left: calc(50% - 40vw);
-}
-
 .visited-node-endingframe {
     border: inherit;
     background-color: #b34545;

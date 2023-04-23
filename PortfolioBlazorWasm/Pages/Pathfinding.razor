@@ -10,128 +10,130 @@
 @inject IDialogService DialogService
 @inject IPathfindingRunner PathFindingService;
 
-<MudText Align="Align.Center" Typo="Typo.h4">Pathfinding algorithm</MudText>
-<MudPaper Class="px-2" MaxWidth="850px">
-    <MudGrid Class="my-2" Spacing="0" Justify="Justify.Center">
-        <MudItem xs="10" sm="10">
-            <MudGrid Spacing="0">
-                <MudItem xs="6" sm="6">
-                    <MudPaper Outlined="true" Class="px-2 pb-2 mt-2" Style="border-bottom:none;border-right:none;">
-                        <MudSelect Dense="true" @bind-Value="@_searchSettings.AlgorithmType" For="@(()=>_searchSettings.AlgorithmType)" Label="Algorithm type">
-                            @foreach (AlgorithmTypes algorithmType in Enum.GetValues(typeof(AlgorithmTypes)))
-                            {
-                                <MudSelectItem Value="@algorithmType">@algorithmType</MudSelectItem>
-                            }
-                        </MudSelect>
-                    </MudPaper>
-                </MudItem>
-                <MudItem xs="6" sm="6">
-                    <MudPaper Outlined="true" Class="px-2 pb-2 mt-2" Style="border-bottom:none;">
-                        <MudSelect Dense="true" @bind-Value="@_searchSettings.SearchSpeed" For="@(()=>_searchSettings.SearchSpeed)" Label="Search Speed">
-                            @foreach (SearchSpeeds searchSpeed in Enum.GetValues(typeof(SearchSpeeds)))
-                            {
-                                <MudSelectItem Value="@searchSpeed">@searchSpeed</MudSelectItem>
-                            }
-                        </MudSelect>
-                    </MudPaper>
-                </MudItem>
-                <MudItem xs="12">
-                    <MudPaper Outlined="true" Class="px-2 pt-1 pb-2 mb-2" Style="">
-                        <MudGrid Class="pa-1 " Justify="Justify.Center">
-                            <MudItem xs="12" sm="6">
-                                <MudGrid Justify="Justify.Center" Spacing="0">
-                                    <MudItem xs="10" sm="6" Class="d-flex justify-center align-center">
-                                        <MudText Typo="Typo.h6" Color="Color.Primary">Design Mode</MudText>
-                                    </MudItem>
-                                    <MudItem xs="2" sm="2" Class="d-flex justify-center align-center">
-                                        <MudIconButton Title="Instructions" Size="Size.Medium" Icon="@Icons.Material.Filled.HelpOutline"
-                                                       OnClick="OpenInstructionsDialog" Color="Color.Info" aria-label="Instructions" />
-                                    </MudItem>
-                                    <MudItem xs="12" sm="8" Class="d-flex justify-center align-center">
-                                        <MudSwitch Size="Size.Medium" @bind-Checked="_isPlaceWalls" Color="Color.Success"
-                                                   LabelPosition="LabelPosition.End" UnCheckedColor="Color.Secondary" Disabled="@(_isAlgorithmRunning || !_isGridReset)">
-                                            <MudChip Style="width:145px;cursor:pointer;" Size="Size.Medium" Label="true" Disabled="@(_isAlgorithmRunning || !_isGridReset)"
-                                                     Color="@(_isPlaceWalls?Color.Success:Color.Secondary)" Variant="Variant.Text">
-                                                @(_isPlaceWalls ? "Place Walls" : "Move Start/Finish")
-                                            </MudChip>
-                                        </MudSwitch>
-                                    </MudItem>
-                                </MudGrid>
-                            </MudItem>
-
-                            <MudItem xs="12" sm="6" Style="border-left:1px solid var(--mud-palette-lines-default); border-radius:1px;">
-                                <EditForm Model="_gridSettings" style="display: flex;flex-direction: row;" OnValidSubmit="RegenerateNewGrid">
-                                    <MudGrid Spacing="0" Justify="Justify.Center" Class="align-content-center">
-                                        <MudItem xs="6" sm="6">
-                                            <MudNumericField Min="GridSettings.RowMin" Max="GridSettings.RowMax" Disabled="@_isAlgorithmRunning"
-                                                             @bind-Value="_gridSettings.RowCount" For="@(()=>_gridSettings.RowCount)"
-                                                             Label="Rows" OnlyValidateIfDirty="true" Variant="Variant.Outlined"
-                                                             HelperText="@($"Min:{GridSettings.RowMin} - Max:{GridSettings.RowMax}")" HelperTextOnFocus="true" />
+<MudPaper Class="pt-4 px-4 py-2 my-2">
+    <MudText Align="Align.Center" Typo="Typo.h4">Pathfinding algorithm</MudText>
+    <MudPaper Class="px-2" MaxWidth="850px">
+        <MudGrid Class="my-2" Spacing="0" Justify="Justify.Center">
+            <MudItem xs="10" sm="10">
+                <MudGrid Spacing="0">
+                    <MudItem xs="6" sm="6">
+                        <MudPaper Outlined="true" Class="px-2 pb-2 mt-2" Style="border-bottom:none;border-right:none;">
+                            <MudSelect Dense="true" @bind-Value="@_searchSettings.AlgorithmType" For="@(()=>_searchSettings.AlgorithmType)" Label="Algorithm type">
+                                @foreach (AlgorithmTypes algorithmType in Enum.GetValues(typeof(AlgorithmTypes)))
+                                {
+                                    <MudSelectItem Value="@algorithmType">@algorithmType</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="6" sm="6">
+                        <MudPaper Outlined="true" Class="px-2 pb-2 mt-2" Style="border-bottom:none;">
+                            <MudSelect Dense="true" @bind-Value="@_searchSettings.SearchSpeed" For="@(()=>_searchSettings.SearchSpeed)" Label="Search Speed">
+                                @foreach (SearchSpeeds searchSpeed in Enum.GetValues(typeof(SearchSpeeds)))
+                                {
+                                    <MudSelectItem Value="@searchSpeed">@searchSpeed</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudPaper Outlined="true" Class="px-2 pt-1 pb-2 mb-2" Style="">
+                            <MudGrid Class="pa-1 " Justify="Justify.Center">
+                                <MudItem xs="12" sm="6">
+                                    <MudGrid Justify="Justify.Center" Spacing="0">
+                                        <MudItem xs="10" sm="6" Class="d-flex justify-center align-center">
+                                            <MudText Typo="Typo.h6" Color="Color.Primary">Design Mode</MudText>
                                         </MudItem>
-                                        <MudItem xs="6" sm="6">
-                                            <MudNumericField Min="GridSettings.ColMin" Max="GridSettings.ColMax" Disabled="@_isAlgorithmRunning"
-                                                             @bind-Value="_gridSettings.ColumnCount" For="@(()=>_gridSettings.ColumnCount)"
-                                                             Label="Columns" OnlyValidateIfDirty="true" Variant="Variant.Outlined"
-                                                             HelperText="@($"Min:{GridSettings.ColMin} - Max:{GridSettings.ColMax}")" HelperTextOnFocus="true" />
+                                        <MudItem xs="2" sm="2" Class="d-flex justify-center align-center">
+                                            <MudIconButton Title="Instructions" Size="Size.Medium" Icon="@Icons.Material.Filled.HelpOutline"
+                                                           OnClick="OpenInstructionsDialog" Color="Color.Info" aria-label="Instructions" />
                                         </MudItem>
-                                        <MudItem xs="6" sm="6" Class="d-flex justify-center">
-                                            <MudButton Variant="Variant.Text" ButtonType="ButtonType.Submit" Disabled="@_isAlgorithmRunning"
-                                                       Size="Size.Small" Color="Color.Warning" EndIcon="fas fa-th fa-xs">Regenerate</MudButton>
-                                        </MudItem>
-                                        <MudItem xs="6" sm="6" Class="d-flex justify-center">
-                                            <MudButton ButtonType="ButtonType.Button" Variant="Variant.Text" Color="Color.Success" EndIcon="fas fa-magic fa-xs"
-                                                       Disabled="@_isAlgorithmRunning" OnClick="GenerateMaze" Size="Size.Small">Create Walls</MudButton>
+                                        <MudItem xs="12" sm="8" Class="d-flex justify-center align-center">
+                                            <MudSwitch Size="Size.Medium" @bind-Checked="_isPlaceWalls" Color="Color.Success"
+                                                       LabelPosition="LabelPosition.End" UnCheckedColor="Color.Secondary" Disabled="@(_isAlgorithmRunning || !_isGridReset)">
+                                                <MudChip Style="width:145px;cursor:pointer;" Size="Size.Medium" Label="true" Disabled="@(_isAlgorithmRunning || !_isGridReset)"
+                                                         Color="@(_isPlaceWalls?Color.Success:Color.Secondary)" Variant="Variant.Text">
+                                                    @(_isPlaceWalls ? "Place Walls" : "Move Start/Finish")
+                                                </MudChip>
+                                            </MudSwitch>
                                         </MudItem>
                                     </MudGrid>
-                                </EditForm>
+                                </MudItem>
 
-                            </MudItem>
-                        </MudGrid>
-                    </MudPaper>
-                </MudItem>
+                                <MudItem xs="12" sm="6" Style="border-left:1px solid var(--mud-palette-lines-default); border-radius:1px;">
+                                    <EditForm Model="_gridSettings" style="display: flex;flex-direction: row;" OnValidSubmit="RegenerateNewGrid">
+                                        <MudGrid Spacing="0" Justify="Justify.Center" Class="align-content-center">
+                                            <MudItem xs="6" sm="6">
+                                                <MudNumericField Min="GridSettings.RowMin" Max="GridSettings.RowMax" Disabled="@_isAlgorithmRunning"
+                                                                 @bind-Value="_gridSettings.RowCount" For="@(()=>_gridSettings.RowCount)"
+                                                                 Label="Rows" OnlyValidateIfDirty="true" Variant="Variant.Outlined"
+                                                                 HelperText="@($"Min:{GridSettings.RowMin} - Max:{GridSettings.RowMax}")" HelperTextOnFocus="true" />
+                                            </MudItem>
+                                            <MudItem xs="6" sm="6">
+                                                <MudNumericField Min="GridSettings.ColMin" Max="GridSettings.ColMax" Disabled="@_isAlgorithmRunning"
+                                                                 @bind-Value="_gridSettings.ColumnCount" For="@(()=>_gridSettings.ColumnCount)"
+                                                                 Label="Columns" OnlyValidateIfDirty="true" Variant="Variant.Outlined"
+                                                                 HelperText="@($"Min:{GridSettings.ColMin} - Max:{GridSettings.ColMax}")" HelperTextOnFocus="true" />
+                                            </MudItem>
+                                            <MudItem xs="6" sm="6" Class="d-flex justify-center">
+                                                <MudButton Variant="Variant.Text" ButtonType="ButtonType.Submit" Disabled="@_isAlgorithmRunning"
+                                                           Size="Size.Small" Color="Color.Warning" EndIcon="fas fa-th fa-xs">Regenerate</MudButton>
+                                            </MudItem>
+                                            <MudItem xs="6" sm="6" Class="d-flex justify-center">
+                                                <MudButton ButtonType="ButtonType.Button" Variant="Variant.Text" Color="Color.Success" EndIcon="fas fa-magic fa-xs"
+                                                           Disabled="@_isAlgorithmRunning" OnClick="GenerateMaze" Size="Size.Small">Create Walls</MudButton>
+                                            </MudItem>
+                                        </MudGrid>
+                                    </EditForm>
 
-            </MudGrid>
-        </MudItem>
-        <MudItem xs="6" sm="2" Style="display: flex;align-items: center;justify-content: center;" Class="mb-2">
-            <MudButtonGroup VerticalAlign="true" OverrideStyles="false">
-                <MudButton StartIcon="@Icons.Material.Filled.StopCircle" Size="Size.Small" Variant="Variant.Filled" Color="Color.Error" OnClick="CancelAlgorithm">Cancel</MudButton>
-                <MudMenu Label="Reset" Disabled="@_isAlgorithmRunning" Color="Color.Warning" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Repeat" EndIcon="@Icons.Material.Filled.KeyboardArrowDown">
-                    <MudMenuItem IconColor="Color.Info" OnClick="ClearVisitedNodes" OnTouch="ClearVisitedNodes" Icon="@Icons.Material.Filled.CropSquare">Clear Visited</MudMenuItem>
-                    <MudMenuItem IconColor="Color.Tertiary" OnClick="ClearWalls" OnTouch="ClearWalls" Icon="@Icons.Material.Filled.GridOff">Clear Visited & Walls</MudMenuItem>
-                    <MudMenuItem IconColor="Color.Secondary" OnClick="ResetGridToDefault" OnTouch="ResetGridToDefault" Icon="@Icons.Material.Filled.Refresh">Full Reset</MudMenuItem>
-                </MudMenu>
-                <MudButton StartIcon="@Icons.Material.Filled.PlayCircleOutline" Size="Size.Small" Variant="Variant.Filled" Color="Color.Info" OnClick="StartAlgorithm" Disabled="@(_isAlgorithmRunning || !_isGridReset)">Run</MudButton>
-            </MudButtonGroup>
-        </MudItem>
-    </MudGrid>
+                                </MudItem>
+                            </MudGrid>
+                        </MudPaper>
+                    </MudItem>
 
+                </MudGrid>
+            </MudItem>
+            <MudItem xs="6" sm="2" Style="display: flex;align-items: center;justify-content: center;" Class="mb-2">
+                <MudButtonGroup VerticalAlign="true" OverrideStyles="false">
+                    <MudButton StartIcon="@Icons.Material.Filled.StopCircle" Size="Size.Small" Variant="Variant.Filled" Color="Color.Error" OnClick="CancelAlgorithm">Cancel</MudButton>
+                    <MudMenu Label="Reset" Disabled="@_isAlgorithmRunning" Color="Color.Warning" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Repeat" EndIcon="@Icons.Material.Filled.KeyboardArrowDown">
+                        <MudMenuItem IconColor="Color.Info" OnClick="ClearVisitedNodes" OnTouch="ClearVisitedNodes" Icon="@Icons.Material.Filled.CropSquare">Clear Visited</MudMenuItem>
+                        <MudMenuItem IconColor="Color.Tertiary" OnClick="ClearWalls" OnTouch="ClearWalls" Icon="@Icons.Material.Filled.GridOff">Clear Visited & Walls</MudMenuItem>
+                        <MudMenuItem IconColor="Color.Secondary" OnClick="ResetGridToDefault" OnTouch="ResetGridToDefault" Icon="@Icons.Material.Filled.Refresh">Full Reset</MudMenuItem>
+                    </MudMenu>
+                    <MudButton StartIcon="@Icons.Material.Filled.PlayCircleOutline" Size="Size.Small" Variant="Variant.Filled" Color="Color.Info" OnClick="StartAlgorithm" Disabled="@(_isAlgorithmRunning || !_isGridReset)">Run</MudButton>
+                </MudButtonGroup>
+            </MudItem>
+        </MudGrid>
+
+    </MudPaper>
 </MudPaper>
 
 @if (PathFindingService.Grid is not null)
 {
     <div class="grid-container">
-        <table>
+        <div class="grid-table" style="grid-template-rows: repeat(@PathFindingService.Grid.GetLength(0), 25px);">
             @for (int i = 0; i < PathFindingService.Grid.GetLength(0); i++)
             {
-                <tr>
+                <div class="grid-row" style="grid-template-columns: repeat(@PathFindingService.Grid.GetLength(1), 25px);">
                     @for (int j = 0; j < PathFindingService.Grid.GetLength(1); j++)
                     {
                         int x = i, y = j;
                         var node = PathFindingService.Grid[x, y];
                         @if (!_isAlgorithmRunning && _isPlaceWalls && _isGridReset)
                         {
-                            <td draggable="true"
+                            <div draggable="true"
                                 dropzone="move"
                                 ondragover="event.preventDefault();"
                                 ondragstart="event.dataTransfer.setData('', event.target.id);"
                 @onclick="(()=>HandleClickedCell(node))"
                 @ondragenter="(()=> HandleWallPlace(node))"
-                                class="@(_isDragging ? GetDropClass(node.State) : "") @GetClassVisited(node.Visited) @GetClass(node.State) @GetDragClass(node.State)">
-                            </td>
+                                 class="grid-col @(_isDragging ? GetDropClass(node.State) : "") @GetClassVisited(node.Visited) @GetClass(node.State) @GetDragClass(node.State)">
+                            </div>
                         }
                         else if (!_isAlgorithmRunning && !_isPlaceWalls && _isGridReset)
                         {
-                            <td @ondragstart="(()=>HandleDragStart(node))"
+                            <div @ondragstart="(()=>HandleDragStart(node))"
                 @ondrop="(()=>HandleDrop(node))"
                                 ondragover="event.preventDefault();"
                                 ondrag="event.preventDefault()"
@@ -139,23 +141,23 @@
                                 ondragleave="event.target.classList.remove('can-drop');"
                                 ondragend="document.elementFromPoint(event.clientX, event.clientY).classList.remove('can-drop');"
                                 draggable="@GetDraggable(node.State)"
-                                class="@(_isDragging ? GetDropClass(node.State) : "") @GetClass(node.State) @GetDragClass(node.State)">
-                            </td>
+                                 class="grid-col @(_isDragging ? GetDropClass(node.State) : "") @GetClass(node.State) @GetDragClass(node.State)">
+                            </div>
                         }
                         else if (_isAlgorithmRunning && !_isGridReset)
                         {
-                            <td class="@GetClassVisited(node.Visited)  @GetClassVisited(node.Visited) @GetClass(node.State)">
-                            </td>
+                            <div class="grid-col @GetClassVisited(node.Visited)  @GetClassVisited(node.Visited) @GetClass(node.State)">
+                            </div>
                         }
                         else
                         {
-                            <td class="@GetClassVisited(node.Visited) @GetClassVisited(node.Visited) @GetClass(node.State)">
-                            </td>
+                            <div class="grid-col @GetClassVisited(node.Visited) @GetClassVisited(node.Visited) @GetClass(node.State)">
+                            </div>
                         }
                     }
-                </tr>
+                </div>
             }
-        </table>
+        </div>
     </div>
 }
 else

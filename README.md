@@ -14,8 +14,9 @@ The project contains different types of pages where each page addresses some of 
 - State Management 
 - Data Persistence 
 - Dependency injection
-- Testing
 - Routing
+- Testing
+- Data Binding
 
 ## Running locally
 
