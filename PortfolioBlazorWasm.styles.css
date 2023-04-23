@@ -375,27 +375,32 @@
             color: var(--mud-palette-success);
         }
 /* /Pages/Pathfinding.razor.rz.scp.css */
-.grid-container td[b-2ytr6hl5ez] {
+.grid-container[b-2ytr6hl5ez] {
+    width: 103%;
+}
+
+.grid-table[b-2ytr6hl5ez] {
+    display: grid;
+    gap: 0px;
+    justify-content: center;
+    
+}
+
+.grid-container .grid-row[b-2ytr6hl5ez] {
+    display: grid;
+}
+
+.grid-container .grid-col[b-2ytr6hl5ez] {
     width: 25px;
     height: 25px;
-    max-width: 25px;
     outline: 1px dashed rgb(175, 216, 248);
     text-align: center;
-    overflow: hidden;
-    z-index: 1;
 }
 
 .mud-chip > .mud-chip-content[b-2ytr6hl5ez] {
     width: 110px;
     justify-content: center;
 }
-
-.grid-container[b-2ytr6hl5ez] {
-    /*max-width: 100vw;*/
-    width: max-content;
-    margin-left: calc(50% - 40vw);
-}
-
 .visited-node-endingframe[b-2ytr6hl5ez] {
     border: inherit;
     background-color: #b34545;
