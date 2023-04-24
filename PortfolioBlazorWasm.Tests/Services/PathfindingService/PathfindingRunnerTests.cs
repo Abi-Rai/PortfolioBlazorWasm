@@ -153,8 +153,8 @@ namespace PortfolioBlazorWasm.Tests.Services.PathfindingService
         {
             // Arrange
             var runner = new PathfindingRunner();
-            object eventSender = null;
-            EventArgs eventArgs = null;
+            object? eventSender = null;
+            EventArgs? eventArgs = null;
             runner.VisitedChanged += (sender, e) =>
             {
                 eventSender = sender;
@@ -177,8 +177,8 @@ namespace PortfolioBlazorWasm.Tests.Services.PathfindingService
         {
             // Arrange
             var runner = new PathfindingRunner();
-            object eventSender = null;
-            Stack<Node> eventArgs = null;
+            object? eventSender = null;
+            Stack<Node>? eventArgs = null;
             runner.ShortestFound += (sender, e) =>
             {
                 eventSender = sender;
