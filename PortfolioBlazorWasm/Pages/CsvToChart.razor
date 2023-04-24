@@ -123,7 +123,7 @@
             <div class="tab pa-2">
                 <MudDataGrid T="PersonalAllowance" Items="@_personalAllowances" Filterable="true" FilterMode="_filterMode" Chang>
                     <Columns>
-                        <PropertyColumn Property="x => x!.To" Filterable="false" />
+                        <PropertyColumn Property="x => x!.ToDate" Filterable="false" />
                         <PropertyColumn Property="x => x!.AllowanceAmountGBP" Format="@("C")" Culture="System.Globalization.CultureInfo.CurrentCulture" />
                         <PropertyColumn Property="x => x!.PercentageChanged" />
                     </Columns>
@@ -182,7 +182,7 @@
                                          Items="_personalAllowances"
                                          Name="Percetange Change"
                                          SeriesType="SeriesType.Line"
-                                         XValue="@(e => e.To)"
+                                         XValue="@(e => e.ToDate)"
                                          YAggregate="@(e => e.Sum(e => e.PercentageChanged))"
                                          OrderBy="e=>e.X" ShowDataLabels />
                             </ChildContent>
@@ -198,7 +198,7 @@
                                      Items="_personalAllowances"
                                      Name="Allowance Amount"
                                      SeriesType="SeriesType.Bar"
-                                     XValue="@(e => e.To)"
+                                     XValue="@(e => e.ToDate)"
                                      YAggregate="@(e => e.Sum(e => e.AllowanceAmountGBP))"
                                      OrderBy="e=>e.X"
                                      Stroke="@(new SeriesStroke { Width = 2, Color="#E51C15"})" />

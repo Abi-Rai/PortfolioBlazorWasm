@@ -124,7 +124,7 @@ public partial class CsvToChart
     }
     private Task SetPersonalAllowanceChartOptions()
     {
-        DateOnly selectionStart = _personalAllowances!.Last().To.AddYears(5);
+        DateOnly selectionStart = _personalAllowances!.Last().ToDate.AddYears(5);
         DateTimeOffset selectionStartDTO = new(selectionStart.Year, selectionStart.Month, selectionStart.Day, 0, 0, 0, TimeSpan.FromHours(10));
         _personalAllowPercentOptions = new()
         {
