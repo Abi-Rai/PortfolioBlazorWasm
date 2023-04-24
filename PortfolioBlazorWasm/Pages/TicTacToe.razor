@@ -12,7 +12,7 @@
     <MudDivider DividerType="DividerType.Middle" Class="my-2 py-4" />
     @if (_gameBoard is not null)
     {
-        <MudPaper Width="350px" Style="margin:auto;position: relative;z-index: -20;">
+        <MudPaper Width="350px" Height="141px" Style="margin:auto;position: relative;z-index: -20;">
             <MudText Align="Align.Center" Typo="Typo.h5">
                 <MudText Typo="Typo.h4" Style=@($"color:{_gameBoard.GetCurrentPlayer().CellColorValue}")>
                     (@_gameBoard.GetCurrentPlayer().Marker)
@@ -36,7 +36,10 @@
                     }
                     else
                     {
-                        <MudText Align="Align.Center" Typo="Typo.h5">@_gameBoard.GetCurrentPlayer().Name<br /> Turn!</MudText>
+                        <MudText Align="Align.Center" Typo="Typo.h5">
+                        @_gameBoard.GetCurrentPlayer().Name<br /> Turn!
+                        <br/>
+                        </MudText>
                     }
                 }
             </MudText>
@@ -86,8 +89,8 @@
                     <MudButton Variant="Variant.Outlined" StartIcon="fas fa-user-cog fa-xs" Color="Color.Info" OnClick="@(() => ShowSettings())" ButtonType="ButtonType.Reset" FullWidth="false" Size="Size.Small" Disabled="!_gameNotStarted" Style="width:187px;height:32px;left:-5px;">Change Settings</MudButton>
                 </MudItem>
                 <MudItem xs="12" sm="6" Style="display: flex;align-items: center;justify-content: center;">
-                    <MudSwitch @bind-Checked="@_playWithComputer" Color="Color.Info" LabelPosition="LabelPosition.Start" Size="Size.Small" Disabled="(!_gameNotStarted || _gameBoard.PlayerTwoStarting)" Style="width:240px;">
-                        <MudChip Label="true" Color="@(_playWithComputer?Color.Tertiary:Color.Surface)" Style="cursor:pointer;width:187px;" Variant="Variant.Outlined" Icon="fas fa-robot fa-lg">Play against computer </MudChip>
+                    <MudSwitch @bind-Checked="@_playWithComputer" Color="Color.Tertiary" LabelPosition="LabelPosition.Start" Size="Size.Small" Disabled="(!_gameNotStarted || _gameBoard.PlayerTwoStarting)" Style="width:240px;">
+                        <MudChip Label="true" Color="@(_playWithComputer?Color.Tertiary:Color.Surface)" Style="cursor:pointer;width:187px;" Variant="Variant.Outlined" Icon="fas fa-robot fa-lg" Disabled="(!_gameNotStarted || _gameBoard.PlayerTwoStarting)" >Play against computer </MudChip>
                     </MudSwitch>
                 </MudItem>
 
