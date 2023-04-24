@@ -1,0 +1,21 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0
+
+WORKDIR /app
+
+# Copy csproj files
+COPY PortfolioBlazorWasm/*.csproj PortfolioBlazorWasm/
+COPY PortfolioBlazorWasm.Components.Tests/*.csproj PortfolioBlazorWasm.Components.Tests/
+COPY PortfolioBlazorWasm.Tests/*.csproj PortfolioBlazorWasm.Tests/
+
+# Copy solution file and restore dependencies
+COPY BlazorWasmPortfolio.sln ./
+RUN dotnet restore BlazorWasmPortfolio.sln
+
+# Copy everything else and build
+COPY PortfolioBlazorWasm/ PortfolioBlazorWasm/
+COPY PortfolioBlazorWasm.Components.Tests/ PortfolioBlazorWasm.Components.Tests/
+COPY PortfolioBlazorWasm.Tests/ PortfolioBlazorWasm.Tests/
+RUN dotnet build
+
+# Run the tests and generate a TRX file
+ENTRYPOINT ["dotnet", "test", "--logger:trx;LogFileName=TestResults.trx"]
