@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using MudBlazor.Services;
 using PortfolioBlazorWasm.Models.TicTacToe.Settings;
-using PortfolioBlazorWasm.Services.BankPaService;
-using PortfolioBlazorWasm.Services.CsvHelperService;
-using PortfolioBlazorWasm.Services.FactsApiService;
-using PortfolioBlazorWasm.Services.PathfindingService;
-using PortfolioBlazorWasm.Services.SessionStorageService;
-using PortfolioBlazorWasm.Services.TicTacToeService;
+using PortfolioBlazorWasm.Services.BankPa;
+using PortfolioBlazorWasm.Services.CsvHelper;
+using PortfolioBlazorWasm.Services.FactsApi;
+using PortfolioBlazorWasm.Services.Pathfinding;
+using PortfolioBlazorWasm.Services.SessionStorage;
+using PortfolioBlazorWasm.Services.TicTacToe;
 
 namespace PortfolioBlazorWasm
 {

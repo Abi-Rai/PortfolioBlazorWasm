@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using PortfolioBlazorWasm.Models.FactsApi;
-using PortfolioBlazorWasm.Services.FactsApiService;
-using PortfolioBlazorWasm.Services.SessionStorageService;
+using PortfolioBlazorWasm.Services.FactsApi;
+using PortfolioBlazorWasm.Services.SessionStorage;
 
 namespace PortfolioBlazorWasm.Pages;
 

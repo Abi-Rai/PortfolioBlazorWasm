@@ -2,7 +2,7 @@ using ApexCharts;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using PortfolioBlazorWasm.Models.UkBankPa;
-using PortfolioBlazorWasm.Services.BankPaService;
+using PortfolioBlazorWasm.Services.BankPa;
 
 namespace PortfolioBlazorWasm.Pages;
 

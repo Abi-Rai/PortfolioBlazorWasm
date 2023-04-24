@@ -3,7 +3,7 @@ using Moq;
 using PortfolioBlazorWasm.Models.TicTacToe;
 using PortfolioBlazorWasm.Models.TicTacToe.Enums;
 using PortfolioBlazorWasm.Models.TicTacToe.Settings;
-using PortfolioBlazorWasm.Services.TicTacToeService;
+using PortfolioBlazorWasm.Services.TicTacToe;
 using System.Diagnostics;
 using Xunit;
 using Xunit.Abstractions;

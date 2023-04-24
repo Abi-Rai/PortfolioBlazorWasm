@@ -1,7 +1,7 @@
 using MudBlazor;
 using PortfolioBlazorWasm.Components.TicTacToe;
 using PortfolioBlazorWasm.Models.TicTacToe.Settings;
-using PortfolioBlazorWasm.Services.TicTacToeService;
+using PortfolioBlazorWasm.Services.TicTacToe;
 
 namespace PortfolioBlazorWasm.Pages;
 
