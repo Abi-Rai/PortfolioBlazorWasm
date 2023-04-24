@@ -48,7 +48,7 @@ jobs:
 
     # Cache build outputs
     - name: Cache build outputs
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           **/bin
@@ -71,7 +71,7 @@ jobs:
 
     # Publish to github-pages branch
     - name: Commit wwwroot to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@3.7.1
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BRANCH: gh-pages
