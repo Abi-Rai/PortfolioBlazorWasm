@@ -3,7 +3,13 @@ name: Build Test Publish & Commit to gh-pages
 on:
   push:
     branches:
-      - master
+      - master 
+permissions:
+    contents: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test-publish-deploy-github-pages:
     # use ubuntu-latest
@@ -14,11 +20,12 @@ jobs:
 
     steps:
     # Checkout the code
-    - uses: actions/checkout@v1
+    - name: Checkout code
+      uses: actions/checkout@v3
   
     # Cache NuGet packages
     - name: Cache NuGet packages
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/.nuget/packages
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
