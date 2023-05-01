@@ -11,7 +11,7 @@ namespace PortfolioBlazorWasm.Pages;
 public partial class Pathfinding
 {
     [CascadingParameter] public MudThemeProvider ThemeProvider { get; set; }
-
+    [Inject] public ILogger<Pathfinding> Logger { get; set; }
     private bool _isAlgorithmRunning;
     private bool _isGridReset;
     private bool _isDragging;
@@ -42,7 +42,7 @@ public partial class Pathfinding
             await PathFindingService.GenerateAndSetGridAsync(_gridSettings.RowCount, _gridSettings.ColumnCount);
             PathFindingService.VisitedChanged += OnNodesVisitedAsync;
             PathFindingService.ShortestFound += OnShortestPathFoundAsync;
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
     }
 
@@ -82,7 +82,7 @@ public partial class Pathfinding
         }
         catch (Exception ex)
         {
-            SnackBarService.AddTwoSecond(string.Format("Error occured:{0}", ex.Message), MudBlazor.Severity.Error);
+            SnackBarService.AddTwoSecond(string.Format("Error occurred: {0}", ex.Message), MudBlazor.Severity.Error);
         }
 
         _isAlgorithmRunning = false;
