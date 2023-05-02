@@ -25,7 +25,7 @@ You can run locally using either Visual Studio or Docker Desktop. Running in dev
 ### 1. Visual Studio 2022
 
 ```
-1. Clone the repository 
+1. Clone the repository
 2. Open the BlazorWasmPortfolio.sln in Visual Studio
 3. Set startup project as PortfolioBlazorWasm
 4. Build and run the project
@@ -33,21 +33,21 @@ You can run locally using either Visual Studio or Docker Desktop. Running in dev
 
 ### 2. Docker Desktop
 
-To build image & run the container
+1. Clone the repository
 
-1. :exclamation:  Change directory to the WASM Client project :exclamation:
+2. :exclamation:  Change directory to the WASM Client project :exclamation:
 	```shell
 	cd PortfolioBlazorWasm
 	```
-2. Use docker-compose
+3. Use docker-compose
 	```shell
 	docker-compose up --build
 	```
-After it finishes building, the site will be live on `localhost:8080`
+> After it finishes building, the site will be live on `localhost:8080`
 
-3. `Ctrl + C` in terminal to stop the container.
+4. `Ctrl + C` in terminal to stop the container.
 
-4. Then to delete the container.
+5. Then to delete the container.
 	```shell
 	 docker-compose down
 	```
