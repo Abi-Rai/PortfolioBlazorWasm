@@ -1,0 +1,85 @@
+﻿@page "/asciiconverter"
+@using SixLabors.ImageSharp
+@using SixLabors.ImageSharp.PixelFormats
+@using SixLabors.ImageSharp.Processing
+@using System.Text;
+
+<InputFile OnChange="@LoadFiles" />
+
+@if (asciiArt != null)
+{
+    <pre>@asciiArt</pre>
+    <InputNumber id="width" @bind-Value="@_width"/>
+    <label for="width">Width</label>
+    <button @onclick="async()=> await RegenerateImage()" class="btn btn-primary">Change size</button>
+}
+
+@code {
+    private string asciiArt;
+    private string[] _AsciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
+    private int _width = 60;
+    private IBrowserFile _file;
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        var imageFile = e.File;
+        _file = e.File;
+        using var imageStream = imageFile.OpenReadStream();
+        using var image = await Image.LoadAsync<Rgba32>(imageStream);
+        var resizedImage = await GetReSizedImageAsync(image, _width);
+        asciiArt = await ConvertToAsciiAsync(resizedImage);
+    }
+    private async Task RegenerateImage()
+    {
+        using var imageStream = _file.OpenReadStream();
+        using var image = await Image.LoadAsync<Rgba32>(imageStream);
+        var resizedImage = await GetReSizedImageAsync(image, _width);
+        asciiArt = await ConvertToAsciiAsync(resizedImage);
+    }
+    private async Task<Image<Rgba32>> GetReSizedImageAsync(Image<Rgba32> inputBitmap, int asciiWidth)
+    {
+        int asciiHeight = 0;
+        //Calculate the new Height of the image from its width
+        asciiHeight = (int)Math.Ceiling((double)inputBitmap.Height * asciiWidth / inputBitmap.Width);
+
+        await Task.Run(() => inputBitmap.Mutate(x => x.Resize(asciiWidth, asciiHeight)));
+
+        return inputBitmap;
+    }
+
+    private async Task<string> ConvertToAsciiAsync(Image<Rgba32> image)
+    {
+        return await Task.Run(() =>
+        {
+            Boolean toggle = false;
+            StringBuilder sb = new StringBuilder();
+            for (int h = 0; h < image.Height; h++)
+            {
+                for (int w = 0; w < image.Width; w++)
+                {
+                    Rgba32 pixelColor = image[w, h];
+                    //Average out the RGB components to find the Gray Color
+                    int red = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                    int green = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                    int blue = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                    Rgba32 grayColor = new Rgba32((byte)red, (byte)green, (byte)blue);
+                    //Use the toggle flag to minimize height-wise stretch
+                    if (!toggle)
+                    {
+                        int index = (grayColor.R * 10) / 255;
+                        sb.Append(_AsciiChars[index]);
+                    }
+                }
+                if (!toggle)
+                {
+                    sb.AppendLine();
+                    toggle = true;
+                }
+                else
+                {
+                    toggle = false;
+                }
+            }
+            return sb.ToString();
+        });
+    }
+}
