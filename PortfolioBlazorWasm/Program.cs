@@ -46,7 +46,7 @@ internal static class Program
         builder.Services.AddMudBlazorDialog();
 
         Log.Logger = new LoggerConfiguration()
-        .MinimumLevel.Fatal()
+        .MinimumLevel.Error()
         .WriteTo.BrowserConsole()
         .CreateLogger();
 

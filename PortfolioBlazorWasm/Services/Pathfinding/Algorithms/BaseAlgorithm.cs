@@ -42,7 +42,8 @@ public abstract class BaseAlgorithm : IAlgorithm
 
     protected async Task SendShortestPath(Node closestNode)
     {
-        Stack<Node>? path = new();
+        Stack<Node> path = new();
+
         var currentNode = closestNode;
         while (currentNode is not null)
         {

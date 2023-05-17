@@ -11,9 +11,7 @@ public class AStar : BaseAlgorithm
     }
     public override async Task<bool> StartAlgorithm(SearchSpeeds searchSpeed, CancellationToken cancellationToken)
     {
-        List<Node> unvisitedNodes = await GetAllNodes(_pathRunner.Grid);
-        Node startNode = unvisitedNodes.Find(node => node.State == NodeState.Start) ?? throw new ArgumentException("No start node found");
-        Node finishNode = unvisitedNodes.Find(node => node.State == NodeState.Finish) ?? throw new ArgumentException("No finish node found");
+        (Node startNode, Node finishNode) = GetStartAndFinishNodes(_pathRunner.Grid);
 
         startNode.GCost = 0;
         startNode.HCost = GetManhattanDistance(startNode, finishNode);
@@ -79,5 +77,43 @@ public class AStar : BaseAlgorithm
                 }
             }
         });
+    }
+    private (Node startNode, Node finishNode) GetStartAndFinishNodes(Node[,] grid)
+    {
+        Node? startNode = null;
+        Node? finishNode = null;
+
+        for (int i = 0; i < grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < grid.GetLength(1); j++)
+            {
+                Node node = grid[i, j];
+                if (node.State == NodeState.Start)
+                {
+                    startNode = node;
+                }
+                else if (node.State == NodeState.Finish)
+                {
+                    finishNode = node;
+                }
+
+                if (startNode is not null && finishNode is not null)
+                {
+                    break;
+                }
+            }
+        }
+
+        if (startNode is null)
+        {
+            throw new ArgumentException("No start node found");
+        }
+
+        if (finishNode is null)
+        {
+            throw new ArgumentException("No finish node found");
+        }
+
+        return (startNode, finishNode);
     }
 }
