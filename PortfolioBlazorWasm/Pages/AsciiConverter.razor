@@ -1,68 +1,114 @@
 ﻿@page "/asciiconverter"
+@using PortfolioBlazorWasm.Components
 @using SixLabors.ImageSharp
 @using SixLabors.ImageSharp.PixelFormats
 @using SixLabors.ImageSharp.Processing
 @using System.Text;
 @using SixLabors.ImageSharp.Processing.Processors.Quantization;
+@inject ILogger<AsciiConverter> Logger;
 
-<InputFile OnChange="@LoadFiles" />
+<MudFileUpload T="IBrowserFile" FilesChanged="LoadFiles" Accept=".png">
+    <ButtonTemplate>
+        <MudButton HtmlTag="label"
+                   Variant="Variant.Filled"
+                   Color="MudBlazor.Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Image"
+                   for="@context">
+            Upload Files
+        </MudButton>
+    </ButtonTemplate>
+</MudFileUpload>
 @if(@imgSrc is not null)
 {
     <div>
         <MudNumericField Label="Width" @bind-Value="@_width" Step="10" Min="40" Max="100"/>
-        <MudButton @onclick="async()=> await RegenerateImage()" Class="mud-theme-primary" Variant="Variant.Filled">Generate Ascii Image</MudButton>
+        <MudButton @onclick="async()=> await RegenerateImage()" Class="mud-theme-primary" Variant="Variant.Filled" Disabled="!_validFile">Generate Ascii Image</MudButton>
     </div>
     <MudPaper Elevation="2">
-        <div style="display:flex;flex-wrap:wrap;justify-items:center;">
-            <img style="width: @(_width * 10)px;border:1px solid green;" src="@imgSrc" />
-            @if (asciiArt != null)
+        <div style="display:flex;flex-wrap:wrap;justify-items:center;justify-content:center;align-items:center;">
+            <img style="width: @(_width * 10)px;border:1px dashed grey;margin: 1rem;border-radius:0.6rem;" src="@imgSrc" />
+            @if (asciiArt != null && !_runningConversion)
             {
-                <pre style="font-family:'Roboto Mono';">@asciiArt</pre>
+                <pre style="width: @(_width * 10)px;border:1px dashed green;margin: 1rem;font-family:'Roboto Mono';background:#272822;color:#f1f1f1;border-radius:0.6rem;">@asciiArt</pre>
+            }
+            else
+            {
+                @if (_runningConversion)
+                {
+                    <h5>Generating Ascii art...</h5>
+                    <MudProgressCircular Color="MudBlazor.Color.Primary" Indeterminate="true" />
+                }
             }
         </div>
     </MudPaper>
 }
 else
 {
-    <h6>loading image...</h6>
+    <MudText Typo="Typo.h6">Please upload an image.</MudText>
 }
 
 @code {
     private string asciiArt;
     private string imgSrc;
     private string[] _AsciiChars = { " ", ".", "-", ":", "*", "+", "=", "%", "@", "#", "#" };
+    private List<string> _acceptableFormats = new() { "png", "jpeg" };
     private int _width = 60;
     private int _imgWidth;
-
+    private bool _validFile = false;
+    private bool _runningConversion = false;
     private IBrowserFile _file;
 
     private async Task OnInitializedAsnyc()
     {
         await base.OnInitializedAsync();
     }
-    private async Task LoadFiles(InputFileChangeEventArgs e)
+    private async Task LoadFiles(IBrowserFile browserFile)
     {
-        var imageFile = e.File;
-        _file = e.File;
-        //using var imageStream = imageFile.OpenReadStream();
-        //using var image = await Image.LoadAsync<Rgba32>(imageStream);
-        //var resizedImage = await GetReSizedImageAsync(image, _width);
-        //asciiArt = await ConvertToAsciiAsync(resizedImage);
-        //// Convert image stream to base64 string
-        var format = imageFile.ContentType.Split('/')[1];
-        var buffer = new byte[imageFile.Size];
-        await imageFile.OpenReadStream().ReadAsync(buffer);
-        var base64String = Convert.ToBase64String(buffer);
+        try
+        {
+            //using var imageStream = browserFile.OpenReadStream();
+            //using var image = await Image.LoadAsync<Rgba32>(imageStream);
+            //var resizedImage = await GetReSizedImageAsync(image, _width);
+            //asciiArt = await ConvertToAsciiAsync(resizedImage);
+            //// Convert image stream to base64 string
+            var format = browserFile.ContentType.Split('/')[1];
+            if(!_acceptableFormats.Contains(format)) throw new InvalidDataException($"wrong file format, acceptable formats are:{string.Join(',',_acceptableFormats)}");
+            var buffer = new byte[browserFile.Size];
+            await browserFile.OpenReadStream().ReadAsync(buffer);
+            var base64String = Convert.ToBase64String(buffer);
 
-        // Set the src of the img element
-        imgSrc = $"data:image/{format};base64,{base64String}";
+            // Set the src of the img element
+            imgSrc = $"data:image/{format};base64,{base64String}";
+            _file = browserFile;
+            _validFile = true;
+        }
+        catch(Exception ex)
+        {
+            _validFile = false;
+            Logger.LogError("Problem loading file:{0} stacktrace:{1}", ex.Message, ex.StackTrace);
+            throw;
+        }
     }
     private async Task RegenerateImage()
     {
-        using var imageStream = _file.OpenReadStream();
-        using var image = await Image.LoadAsync<Rgba32>(imageStream);
-        var resizedImage = await GetReSizedImageAsync(image, _width);
-        asciiArt = await ConvertToAsciiAsync(resizedImage);
+
+        try
+        {
+            _runningConversion = true;
+            using var imageStream = _file.OpenReadStream();
+            using var image = await Image.LoadAsync<Rgba32>(imageStream);
+            var resizedImage = await GetReSizedImageAsync(image, _width);
+            asciiArt = await ConvertToAsciiAsync(resizedImage);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Problem generating art:{0} stacktrace:{1}", ex.Message, ex.StackTrace);
+            throw;
+        }
+        finally
+        {
+            _runningConversion = false;
+        }
     }
     private async Task<Image<Rgba32>> GetReSizedImageAsync(Image<Rgba32> inputBitmap, int asciiWidth)
     {
