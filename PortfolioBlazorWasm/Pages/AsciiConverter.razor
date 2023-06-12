@@ -1,18 +1,17 @@
 ﻿@page "/asciiconverter"
-@using PortfolioBlazorWasm.Components
 @using SixLabors.ImageSharp
 @using SixLabors.ImageSharp.PixelFormats
 @using SixLabors.ImageSharp.Processing
-@using System.Text;
 @using SixLabors.ImageSharp.Processing.Processors.Quantization;
-@inject ILogger<AsciiConverter> Logger;
-@inject HttpClient Http;
 
+
+<MudText Typo="Typo.h4" Align="Align.Center">Generate Ascii art from images.</MudText>
 <div style="display:grid;grid-template-columns:repeat(2,1fr);justify-items:center;align-items:center;" class="mud-paper mud-elevation-1">
 
         <MudFileUpload T="IBrowserFile" FilesChanged="LoadFiles" Accept=".png" Style="margin-top:0;padding:6px;">
             <ButtonTemplate>
                 <MudButton HtmlTag="label"
+                    Size="MudBlazor.Size.Small"
                            Variant="Variant.Filled"
                            Color="MudBlazor.Color.Primary"
                        StartIcon="@Icons.Material.Filled.UploadFile"
@@ -23,7 +22,7 @@
         </MudFileUpload>
 
     <div>
-        <MudButton Variant="Variant.Filled" Size="MudBlazor.Size.Medium" StartIcon="@Icons.Material.Filled.SimCardDownload" Color="MudBlazor.Color.Info" OnClick="LoadSampleImage">
+        <MudButton Variant="Variant.Filled" Size="MudBlazor.Size.Small" StartIcon="@Icons.Material.Filled.SimCardDownload" Color="MudBlazor.Color.Info" OnClick="LoadSampleImage">
             Load sample image
         </MudButton>
     </div>
@@ -32,14 +31,14 @@
 {
     <div style="display:flex; align-items:center;margin:0.5rem;">
         <MudNumericField Label="Width" @bind-Value="@_width" Step="10" Min="40" Max="100" />
-        <MudButton @onclick="async()=> await RegenerateImage()" Color="MudBlazor.Color.Success" Variant="Variant.Filled" Disabled="!_validFile">Generate Ascii Image</MudButton>
+        <MudButton Size="MudBlazor.Size.Small" @onclick="async()=> await RegenerateImage()" Color="MudBlazor.Color.Success" Variant="Variant.Filled" Disabled="!_validFile">Generate Ascii Image</MudButton>
     </div>
     <MudPaper Elevation="2">
         <div style="display:flex;flex-wrap:wrap;justify-items:center;justify-content:center;align-items:center;">
-            <img style="width: @(_width * 10)px;border:1px dashed grey;margin: 1rem;border-radius:0.6rem;" src="@_imgSrc" />
+            <img style="width: @(_width * 10)px; border:1px dashed grey;margin:1rem 0.2rem;border-radius:0.6rem;align-self:normal;" src="@_imgSrc" />
             @if (_asciiArt != null && !_runningConversion)
             {
-                <pre style="width: @(_width * 10)px;border:1px dashed green;margin: 1rem;font-family:'Roboto Mono';background:#272822;color:#f1f1f1;border-radius:0.6rem;">@_asciiArt</pre>
+                <pre style="width: @(_width * 10)px;border:1px dashed green;margin: 1rem 0.2rem;font-family:'Roboto Mono';background:#272822;color:#f1f1f1;border-radius:0.6rem;">@_asciiArt</pre>
             }
             else
             {
@@ -54,6 +53,6 @@
 }
 else
 {
-    <MudText Typo="Typo.h6">Please upload a image file(.png). Or use the sample image.</MudText>
+    <MudText Typo="Typo.h6">Please upload an image<sup><small>.png</small></sup> file, or use the sample image.</MudText>
 }
 

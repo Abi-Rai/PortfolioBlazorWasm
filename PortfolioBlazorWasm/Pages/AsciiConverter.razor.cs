@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using SixLabors.ImageSharp.Processing.Processors.Quantization;
 using System.Text;
@@ -6,6 +7,9 @@ namespace PortfolioBlazorWasm.Pages;
 
 public partial class AsciiConverter
 {
+    [Inject] public ILogger<AsciiConverter> Logger { get; set; }
+    [Inject] public HttpClient Http { get; set; }
+
     private string _asciiArt;
     private string _imgSrc;
     private readonly string[] _asciiChars =
@@ -27,7 +31,7 @@ public partial class AsciiConverter
         "png",
         "jpeg"
     };
-    private int _width = 60;
+    private int _width = 40;
     private bool _validFile = false;
     private bool _runningConversion = false;
     private bool _usingSampleFile = false;
