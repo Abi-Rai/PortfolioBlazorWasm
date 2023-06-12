@@ -2,6 +2,7 @@ using MudBlazor;
 using PortfolioBlazorWasm.Components.TicTacToe;
 using PortfolioBlazorWasm.Models.TicTacToe.Settings;
 using PortfolioBlazorWasm.Services.TicTacToe;
+using Color = MudBlazor.Color;
 
 namespace PortfolioBlazorWasm.Pages;
 
@@ -129,35 +130,6 @@ public partial class TicTacToe
         {
             SnackBarService.Add("Cancelled");
         }
-    }
-
-    private string GetGameState()
-    {
-        if (_gameBoard.IsDraw)
-        {
-            return "Game is a Draw!";
-        }
-
-        if (_gameBoard.IsWon)
-        {
-            return $"{_gameBoard.GetCurrentPlayer().Name} Won!";
-        }
-
-        return "Turn";
-    }
-
-    private string GetGameStateStyle()
-    {
-        if (_gameBoard.IsDraw)
-        {
-            return "color:#ff0707";
-        }
-
-        if (_gameBoard.IsWon)
-        {
-            return $"color:{_gameBoard.GetCurrentPlayer().CellColorValue};";
-        }
-        return "";
     }
 
     private void RemoveSnackbar()
