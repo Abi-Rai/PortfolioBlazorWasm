@@ -83,7 +83,7 @@ public partial class Pathfinding
         catch (Exception ex)
         {
             SnackBarService.AddTwoSecond(string.Format("Error occurred: {0}", ex.Message), MudBlazor.Severity.Error);
-            Logger.LogError("Error occured: {message} stacktrace:{trace}", ex.Message,ex.StackTrace);
+            Logger.LogError("Error occured: {message} stacktrace:{trace}", ex.Message, ex.StackTrace);
         }
 
         _isAlgorithmRunning = false;
@@ -142,7 +142,7 @@ public partial class Pathfinding
     private async Task OnShortestPathFoundAsync(object? sender, Stack<Node> shortestPath)
     {
 
-        while(shortestPath.Any())
+        while (shortestPath.Any())
         {
             var node = shortestPath.Pop();
             if (node.State == NodeState.Start || node.State == NodeState.Finish)

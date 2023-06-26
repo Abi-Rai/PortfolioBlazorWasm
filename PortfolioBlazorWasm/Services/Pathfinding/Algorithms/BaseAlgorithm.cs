@@ -1,6 +1,5 @@
 ﻿using PortfolioBlazorWasm.Models.Pathfinding;
 using PortfolioBlazorWasm.Models.Pathfinding.Enums;
-using PortfolioBlazorWasm.Services.Pathfinding;
 
 namespace PortfolioBlazorWasm.Services.Pathfinding.Algorithms;
 
