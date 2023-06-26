@@ -4,30 +4,30 @@
 @using SixLabors.ImageSharp.Processing
 @using SixLabors.ImageSharp.Processing.Processors.Quantization;
 
-
-<MudText Typo="Typo.h4" Align="Align.Center">Generate Ascii art from images.</MudText>
-<div style="display:grid;grid-template-columns:repeat(2,1fr);justify-items:center;align-items:center;" class="mud-paper mud-elevation-1">
-
+<MudPaper>
+    <MudText Typo="Typo.h4" Align="Align.Center">Generate Ascii art from images.</MudText>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);justify-items:center;align-items:center;">
         <MudFileUpload T="IBrowserFile" FilesChanged="LoadFiles" Accept=".png" Style="margin-top:0;padding:6px;">
             <ButtonTemplate>
                 <MudButton HtmlTag="label"
-                    Size="MudBlazor.Size.Small"
+                           Size="MudBlazor.Size.Small"
                            Variant="Variant.Filled"
                            Color="MudBlazor.Color.Primary"
-                       StartIcon="@Icons.Material.Filled.UploadFile"
+                           StartIcon="@Icons.Material.Filled.UploadFile"
                            for="@context">
                     Upload File
                 </MudButton>
             </ButtonTemplate>
         </MudFileUpload>
 
-    <div>
-        <MudButton Variant="Variant.Filled" Size="MudBlazor.Size.Small" StartIcon="@Icons.Material.Filled.SimCardDownload" Color="MudBlazor.Color.Info" OnClick="LoadSampleImage">
-            Load sample image
-        </MudButton>
+        <div>
+            <MudButton Variant="Variant.Filled" Size="MudBlazor.Size.Small" StartIcon="@Icons.Material.Filled.SimCardDownload" Color="MudBlazor.Color.Info" OnClick="LoadSampleImage">
+                Load sample image
+            </MudButton>
+        </div>
     </div>
-</div>
-@if(_imgSrc is not null)
+</MudPaper>
+@if (_imgSrc is not null)
 {
     <div style="display:flex; align-items:center;margin:0.5rem;">
         <MudNumericField Label="Width" @bind-Value="@_width" Step="10" Min="40" Max="100" />
