@@ -1,17 +1,15 @@
 using Microsoft.AspNetCore.Components;
 using PortfolioBlazorWasm.Models.FactsApi;
 using PortfolioBlazorWasm.Services.FactsApi;
-using PortfolioBlazorWasm.Services.SessionStorage;
 
 namespace PortfolioBlazorWasm.Pages;
 
 public partial class RandomFact
 {
-    [Inject] public IFactsApiClient FactsApiClient { get; set; }
-    [Inject] public ISessionStorageService SessionStorageService { get; set; }
+    [Inject] public IFactsApiClient FactsService { get; set; }
 
     private int _callsMade;
-    private bool _overCallLimit { get => _callsMade >= 10; }
+    private bool OverCallLimit { get => _callsMade >= 10; }
 
     private FactDto? _fact;
     private List<FactDto>? _sessionStoredFacts;
@@ -26,17 +24,17 @@ public partial class RandomFact
         await base.OnAfterRenderAsync(firstRender);
         if (firstRender)
         {
-            _sessionStoredFacts = await SessionStorageService.GetFactsFromSessionStorage();
-            _callsMade = await SessionStorageService.GetCallsMadeFromSessionStorage();
+            _sessionStoredFacts = await FactsService.GetFactsFromSessionStorage();
+            _callsMade = await FactsService.GetCallsMadeFromSessionStorage();
             if (_sessionStoredFacts.Any())
             {
                 _fact = _sessionStoredFacts.Last();
             }
             else
             {
-                _fact = await FactsApiClient.GetFactAsync();
-                _sessionStoredFacts = await SessionStorageService.GetFactsFromSessionStorage();
-                _callsMade = await SessionStorageService.GetCallsMadeFromSessionStorage();
+                _fact = await FactsService.GetFactAsync();
+                _sessionStoredFacts = await FactsService.GetFactsFromSessionStorage();
+                _callsMade = await FactsService.GetCallsMadeFromSessionStorage();
             }
 
             StateHasChanged();
@@ -45,9 +43,9 @@ public partial class RandomFact
 
     private async Task GetRandomFact()
     {
-        _fact = await FactsApiClient.GetFactAsync();
-        _sessionStoredFacts = await SessionStorageService.GetFactsFromSessionStorage();
-        _callsMade = await SessionStorageService.GetCallsMadeFromSessionStorage();
+        _fact = await FactsService.GetFactAsync();
+        _sessionStoredFacts = await FactsService.GetFactsFromSessionStorage();
+        _callsMade = await FactsService.GetCallsMadeFromSessionStorage();
     }
 
     private const string _programDICode = """

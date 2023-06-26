@@ -2,9 +2,6 @@
 @using PortfolioBlazorWasm.Components
 @using PortfolioBlazorWasm.Models.FactsApi;
 
-
-
-
 <PageTitle>Random Fact API</PageTitle>
 <MudPaper Class="pa-4">
     <MudText Typo="Typo.h5">Data persistance in Blazor WASM</MudText>
@@ -29,9 +26,9 @@
                 </MudCard>
             }
             <MudStack Justify="Justify.Center" Row="true">
-                <MudButton Variant="@(_overCallLimit?Variant.Outlined:Variant.Filled)" Color="Color.Primary" OnClick="GetRandomFact" Style="height:32px;width:250px;margin-top:20px;" StartIcon="@(_overCallLimit?@Icons.Material.Filled.CallReceived:Icons.Material.Filled.SwapCalls)">@(_overCallLimit ? "Get from stored session" : "Get from Api")</MudButton>
-                    <MudBadge Content="@_callsMade" Color="@(_overCallLimit?Color.Error:Color.Info)" Overlap="true" Class="mx-6 my-4">
-                        <MudChip Label="true" Color="@(_overCallLimit?Color.Error:Color.Info)" Variant="Variant.Text" Text="Calls made"></MudChip>
+                <MudButton Variant="@(OverCallLimit?Variant.Outlined:Variant.Filled)" Color="Color.Primary" OnClick="GetRandomFact" Style="height:32px;width:250px;margin-top:20px;" StartIcon="@(OverCallLimit?@Icons.Material.Filled.CallReceived:Icons.Material.Filled.SwapCalls)">@(OverCallLimit ? "Get from stored session" : "Get from Api")</MudButton>
+                    <MudBadge Content="@_callsMade" Color="@(OverCallLimit?Color.Error:Color.Info)" Overlap="true" Class="mx-6 my-4">
+                        <MudChip Label="true" Color="@(OverCallLimit?Color.Error:Color.Info)" Variant="Variant.Text" Text="Calls made"></MudChip>
                     </MudBadge>
                 </MudStack>
             </MudItem>

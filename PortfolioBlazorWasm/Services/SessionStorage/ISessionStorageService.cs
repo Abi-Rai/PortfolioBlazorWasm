@@ -1,13 +1,7 @@
-﻿using PortfolioBlazorWasm.Models.FactsApi;
+﻿namespace PortfolioBlazorWasm.Services.SessionStorage;
 
-namespace PortfolioBlazorWasm.Services.SessionStorage
+public interface ISessionStorageService
 {
-    public interface ISessionStorageService
-    {
-        Task<int> GetCallsMadeFromSessionStorage();
-        Task<FactDto> GetFactFromSessionStorage();
-        Task<List<FactDto>> GetFactsFromSessionStorage();
-        Task IncrementCallsMadeInSessionStorage();
-        Task StoreFactInSessionStorage(FactDto fact);
-    }
+    public Task<T> GetValueFromSessionStorage<T>(string key, T defaultValue);
+    public Task StoreValueInSessionStorage(string key, object value);
 }
