@@ -21,13 +21,13 @@ public class AStar : BaseAlgorithm
         {
             startNode
         };
-
+        AStarNodeComparer comparer = new();
         SetMaxUpdateCount(searchSpeed);
         int updatedNodes = 0;
         while (openSet.Any())
         {
             cancellationToken.ThrowIfCancellationRequested();
-            openSet.Sort(new AStarNodeComparer());
+            openSet.Sort(comparer);
             Node currentNode = openSet.First();
             openSet.Remove(currentNode);
             currentNode.Visited = true;
