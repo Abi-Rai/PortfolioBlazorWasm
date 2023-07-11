@@ -42,8 +42,8 @@ You can run locally using either Visual Studio or Docker Desktop. Running in dev
    ```
 3. Use docker-compose
    `shell
-	docker-compose up --build
-	`
+docker-compose up --build
+`
 
    > After it finishes building, the site will be live on `localhost:8080`
 
@@ -56,7 +56,7 @@ You can run locally using either Visual Studio or Docker Desktop. Running in dev
 
 ---
 
-### 3.Images
+### Images
 
 <img src="https://github.com/Abi-Rai/PortfolioBlazorWasm/assets/52832186/1b9254e2-b360-4dd9-94f6-56f8f136e3f1" width="46%"></img>
 <img src="https://github.com/Abi-Rai/PortfolioBlazorWasm/assets/52832186/bd2cab2f-026d-4483-929f-6d541a0fc10f" width="37.5%"></img>
