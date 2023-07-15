@@ -155,16 +155,15 @@ public partial class Pathfinding
             await InvokeAsync(StateHasChanged);
         }
     }
-    #endregion
-
-    #region Drag & click cell methods
     private async Task OnNodesVisitedAsync(object? sender, EventArgs args)
     {
         // needs to be a delay of at least 1 millisecond otherwise the re-rendering happens too fast.
         await Task.Delay(1);
         await InvokeAsync(StateHasChanged);
     }
+    #endregion
 
+    #region Drag & click cell methods
     private void HandleWallPlace(Node nodeSelected)
     {
         if (nodeSelected.State == NodeState.None || nodeSelected.State == NodeState.Wall)
