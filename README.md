@@ -37,10 +37,13 @@ You can run locally using either Visual Studio or Docker Desktop. Running in dev
 1. Clone the repository
 
 2. :exclamation: Change directory to the WASM Client project :exclamation:
+
    ```shell
    cd PortfolioBlazorWasm
    ```
+
 3. Use docker-compose
+
    ```shell
    docker-compose up --build
    ```
@@ -50,6 +53,7 @@ You can run locally using either Visual Studio or Docker Desktop. Running in dev
 4. `Ctrl + C` in terminal to stop the container.
 
 5. Then to delete the container.
+
    ```shell
     docker-compose down
    ```
