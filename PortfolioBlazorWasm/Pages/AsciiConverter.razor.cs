@@ -65,7 +65,7 @@ public partial class AsciiConverter
         catch (Exception ex)
         {
             _validFile = false;
-            Logger.LogError("Problem loading file:{0} stacktrace:{1}", ex.Message, ex.StackTrace);
+            Logger.LogError("Problem loading file:{message} stacktrace:{stacktrace}", ex.Message, ex.StackTrace);
             throw;
         }
         finally
@@ -86,7 +86,7 @@ public partial class AsciiConverter
         }
         catch (Exception ex)
         {
-            Logger.LogError("Problem generating art:{0} stacktrace:{1}", ex.Message, ex.StackTrace);
+            Logger.LogError("Problem generating art:{message} stacktrace:{stacktrace}", ex.Message, ex.StackTrace);
             throw;
         }
         finally
@@ -121,7 +121,7 @@ public partial class AsciiConverter
                 int red = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
                 int green = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
                 int blue = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
-                Rgba32 grayColor = new Rgba32((byte)red, (byte)green, (byte)blue);
+                Rgba32 grayColor = new((byte)red, (byte)green, (byte)blue);
                 if (!toggle)
                 {
                     int index = (grayColor.R * (_asciiChars.Length - 1)) / 255;
