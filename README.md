@@ -41,9 +41,9 @@ You can run locally using either Visual Studio or Docker Desktop. Running in dev
    cd PortfolioBlazorWasm
    ```
 3. Use docker-compose
-   `shell
-docker-compose up --build
-`
+   ```shell
+   docker-compose up --build
+   ```
 
    > After it finishes building, the site will be live on `localhost:8080`
 
