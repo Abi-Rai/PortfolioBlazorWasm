@@ -70,5 +70,5 @@ You can run locally using either Visual Studio or Docker Desktop. Running in dev
 ## Credits
 
 - [MudBlazor](https://github.com/MudBlazor/MudBlazor/) : Blazor UI component Library
-- [Blazor-ApexCharts](https://github.com/apexcharts/Blazor-ApexCharts) : ApexCharts wrapper for Blazor
+- [Blazor-ApexCharts](https://github.com/apexcharts/Blazor-ApexCharts) : Blazor wrapper for ApexCharts
 - [Pathfinding Visualizer](https://github.com/clementmihailescu/Pathfinding-Visualizer) : Where I got the idea for building the pathfinding page.
