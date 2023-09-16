@@ -26,9 +26,9 @@
                 </MudCard>
             }
             <MudStack Justify="Justify.Center" Row="true">
-                <MudButton Variant="@(OverCallLimit?Variant.Outlined:Variant.Filled)" Color="Color.Primary" OnClick="GetRandomFact" Style="height:32px;width:250px;margin-top:20px;" StartIcon="@(OverCallLimit?@Icons.Material.Filled.CallReceived:Icons.Material.Filled.SwapCalls)">@(OverCallLimit ? "Get from stored session" : "Get from Api")</MudButton>
+                <MudButton Class="random-fact-button" Variant="@(OverCallLimit?Variant.Outlined:Variant.Filled)" Size="Size.Small" Color="Color.Primary" OnClick="GetRandomFact" Style="height:54px;width:250px;margin-top:20px;" StartIcon="@(OverCallLimit?@Icons.Material.Filled.CallReceived:Icons.Material.Filled.SwapCalls)">@(OverCallLimit ? "Get from stored session" : "Get from Api")</MudButton>
                     <MudBadge Content="@_callsMade" Color="@(OverCallLimit?Color.Error:Color.Info)" Overlap="true" Class="mx-6 my-4">
-                        <MudChip Label="true" Color="@(OverCallLimit?Color.Error:Color.Info)" Variant="Variant.Text" Text="Calls made"></MudChip>
+                        <MudChip Style="height:54px;" Label="true" Color="@(OverCallLimit?Color.Error:Color.Info)" Variant="Variant.Text" Text="Calls made"></MudChip>
                     </MudBadge>
                 </MudStack>
             </MudItem>
