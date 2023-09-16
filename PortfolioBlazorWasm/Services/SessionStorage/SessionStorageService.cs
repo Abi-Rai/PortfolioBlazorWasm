@@ -13,13 +13,13 @@ public class SessionStorageService : ISessionStorageService
         _jsRuntime = jSRuntime;
     }
 
-    public async Task<T> GetValueFromSessionStorage<T>(string key, T defaultValue)
+    public async Task<T> GetValue<T>(string key, T defaultValue)
     {
         var json = await _jsRuntime.InvokeAsync<string>("sessionStorage.getItem", key);
         return json is null ? defaultValue : JsonSerializer.Deserialize<T>(json)!;
     }
 
-    public async Task StoreValueInSessionStorage(string key, object value)
+    public async Task SetValue(string key, object value)
     {
         await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", key, JsonSerializer.Serialize(value));
     }

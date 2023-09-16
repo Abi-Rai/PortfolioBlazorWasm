@@ -2,6 +2,6 @@
 
 public interface ISessionStorageService
 {
-    public Task<T> GetValueFromSessionStorage<T>(string key, T defaultValue);
-    public Task StoreValueInSessionStorage(string key, object value);
+    public Task<T> GetValue<T>(string key, T defaultValue);
+    public Task SetValue(string key, object value);
 }

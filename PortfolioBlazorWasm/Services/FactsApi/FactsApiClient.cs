@@ -7,12 +7,14 @@ public class FactsApiClient : IFactsApiClient
 {
     private readonly HttpClient _httpClient;
     private readonly ISessionStorageService _sessionStorageService;
+    private readonly ILogger<FactsApiClient> _logger;
     private const string _factsKey = "facts";
     private const string _callsMadeKey = "callsMade";
-    public FactsApiClient(HttpClient httpClient, ISessionStorageService sessionStorageService)
+    public FactsApiClient(HttpClient httpClient, ISessionStorageService sessionStorageService, ILogger<FactsApiClient> logger)
     {
         _httpClient = httpClient;
         _sessionStorageService = sessionStorageService;
+        _logger = logger;
     }
 
     public async Task<FactDto> GetFactAsync()
@@ -38,18 +40,18 @@ public class FactsApiClient : IFactsApiClient
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            _logger.LogError("Problem calling api: {Message}", ex.Message);
             throw;
         }
         return await GetFactFromSessionStorage();
     }
     public async Task<List<FactDto>> GetFactsFromSessionStorage()
     {
-        return await _sessionStorageService.GetValueFromSessionStorage(_factsKey, new List<FactDto>());
+        return await _sessionStorageService.GetValue(_factsKey, new List<FactDto>());
     }
     public async Task<int> GetCallsMadeFromSessionStorage()
     {
-        return await _sessionStorageService.GetValueFromSessionStorage(_callsMadeKey, 0);
+        return await _sessionStorageService.GetValue(_callsMadeKey, 0);
     }
     public async Task<FactDto> GetFactFromSessionStorage()
     {
@@ -61,13 +63,13 @@ public class FactsApiClient : IFactsApiClient
     {
         var callsMade = await GetCallsMadeFromSessionStorage();
         callsMade++;
-        await _sessionStorageService.StoreValueInSessionStorage(_callsMadeKey, callsMade);
+        await _sessionStorageService.SetValue(_callsMadeKey, callsMade);
     }
 
     private async Task StoreFactInSessionStorage(FactDto fact)
     {
         var facts = await GetFactsFromSessionStorage();
         facts.Add(fact);
-        await _sessionStorageService.StoreValueInSessionStorage(_factsKey, facts);
+        await _sessionStorageService.SetValue(_factsKey, facts);
     }
 }
