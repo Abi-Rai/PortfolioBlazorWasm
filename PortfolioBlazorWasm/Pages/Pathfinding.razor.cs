@@ -8,7 +8,7 @@ using PortfolioBlazorWasm.Models.Pathfinding.Mazes;
 
 namespace PortfolioBlazorWasm.Pages;
 
-public partial class Pathfinding
+public partial class Pathfinding : IDisposable
 {
     [CascadingParameter] public MudThemeProvider ThemeProvider { get; set; }
     [Inject] public ILogger<Pathfinding> Logger { get; set; }
@@ -16,7 +16,7 @@ public partial class Pathfinding
     private bool _isGridReset;
     private bool _isDragging;
     private bool _isPlaceWalls;
-
+    
     private Node? _draggedNode;
     private SearchSettings _searchSettings;
     private CancellationTokenSource _cts;
@@ -36,7 +36,6 @@ public partial class Pathfinding
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await base.OnAfterRenderAsync(firstRender);
         if (firstRender)
         {
             await PathFindingService.GenerateAndSetGridAsync(_gridSettings.RowCount, _gridSettings.ColumnCount);
@@ -289,6 +288,32 @@ public partial class Pathfinding
             className += "-animated";
         }
         return className;
+    }
+    #endregion
+
+    #region Dispose pattern
+
+    private bool _disposed = false;
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+
+        if (disposing)
+        {
+            PathFindingService.VisitedChanged -= OnNodesVisitedAsync;
+            PathFindingService.ShortestFound -= OnShortestPathFoundAsync;
+        }
+        _disposed = true;
+    }
+    ~Pathfinding()
+    {
+        Dispose(false);
     }
     #endregion
 }
