@@ -24,7 +24,7 @@ public partial class RandomFact
             _callsMade = await FactsService.GetCallsMadeFromSessionStorage();
             if (_sessionStoredFacts.Any())
             {
-                _fact = _sessionStoredFacts.Last();
+                _fact = _sessionStoredFacts[^1];
             }
             else
             {

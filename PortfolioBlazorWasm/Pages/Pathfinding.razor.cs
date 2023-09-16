@@ -163,7 +163,7 @@ public partial class Pathfinding : IDisposable
     #endregion
 
     #region Drag & click cell methods
-    private void HandleWallPlace(Node nodeSelected)
+    private static void HandleWallPlace(Node nodeSelected)
     {
         if (nodeSelected.State == NodeState.None || nodeSelected.State == NodeState.Wall)
         {
@@ -171,7 +171,7 @@ public partial class Pathfinding : IDisposable
         }
     }
 
-    public void HandleClickedCell(Node selectedNode)
+    public static void HandleClickedCell(Node selectedNode)
     {
         if (selectedNode.State == NodeState.None || selectedNode.State == NodeState.Wall)
         {
@@ -179,7 +179,7 @@ public partial class Pathfinding : IDisposable
         }
     }
 
-    private NodeState ToggleWallState(NodeState nodeState)
+    private static NodeState ToggleWallState(NodeState nodeState)
     {
         return (nodeState == NodeState.None ? NodeState.Wall : NodeState.None);
     }
@@ -217,14 +217,14 @@ public partial class Pathfinding : IDisposable
         }
     }
 
-    private string GetDraggable(NodeState nodeState)
+    private static string GetDraggable(NodeState nodeState)
     {
         if (IsDraggable(nodeState))
             return "true";
         return "false";
     }
 
-    private bool IsDraggable(NodeState nodeState)
+    private static bool IsDraggable(NodeState nodeState)
     {
         return nodeState == NodeState.Start || nodeState == NodeState.Finish;
     }
