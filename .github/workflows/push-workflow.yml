@@ -50,7 +50,7 @@ jobs:
       with:
         files: 'PortfolioBlazorWasm/wwwroot/appsettings.json'
         env:
-          GTAG_ID: ${{ secrets.GOOGLE_TAG_ID }}
+          GTAG_ID_PLACEHOLDER: ${{ secrets.GOOGLE_TAG_ID }}
 
     # Install dotnet wasm buildtools workload
     - name: Install .NET WASM Build Tools
