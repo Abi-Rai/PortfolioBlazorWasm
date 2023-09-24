@@ -12,6 +12,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0F540010-8F26-4EF3-AA46-2853889AB95C}"
 	ProjectSection(SolutionItems) = preProject
 		dockerfile.tests = dockerfile.tests
+		.github\workflows\pull-request-workflow.yml = .github\workflows\pull-request-workflow.yml
+		.github\workflows\push-workflow.yml = .github\workflows\push-workflow.yml
 		README.md = README.md
 	EndProjectSection
 EndProject

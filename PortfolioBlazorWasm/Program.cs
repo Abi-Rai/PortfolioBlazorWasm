@@ -1,3 +1,4 @@
+using Blazor.Analytics;
 using FluentValidation;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -20,6 +21,7 @@ internal static class Program
     {
 
         var builder = WebAssemblyHostBuilder.CreateDefault(args);
+        var configuration = builder.Configuration;
         builder.RootComponents.Add<App>("#app");
         builder.RootComponents.Add<HeadOutlet>("head::after");
         builder.Services.AddTransient<IPathfindingRunner, PathfindingRunner>();
@@ -30,7 +32,7 @@ internal static class Program
         builder.Services.AddScoped<IBankPaService, BankPaService>();
         builder.Services.AddHttpClient<IFactsApiClient, FactsApiClient>(client =>
         {
-            client.BaseAddress = new Uri(builder.Configuration["factsapi"]!);
+            client.BaseAddress = new Uri(configuration["factsapi"]!);
         });
         builder.Services.AddMudServices(config =>
         {
@@ -45,6 +47,7 @@ internal static class Program
         });
         builder.Services.AddMudBlazorDialog();
 
+        builder.Services.AddGoogleAnalytics(configuration["GTAG_ID"]);
         Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Error()
         .WriteTo.BrowserConsole()
