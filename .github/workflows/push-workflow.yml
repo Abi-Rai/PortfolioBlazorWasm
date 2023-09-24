@@ -44,14 +44,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    # App Settings Variable Substitution
-    - name: App Settings Variable Substitution
-      uses: microsoft/variable-substitution@v1
-      with:
-        files: 'PortfolioBlazorWasm/wwwroot/appsettings.json'
-        env:
-          GTAG_ID_PLACEHOLDER: ${{ secrets.GOOGLE_TAG_ID }}
-
     # Install dotnet wasm buildtools workload
     - name: Install .NET WASM Build Tools
       run: dotnet workload install wasm-tools
