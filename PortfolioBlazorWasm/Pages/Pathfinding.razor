@@ -97,7 +97,7 @@
             @* TODO:  playground to adjust menus -> https://try.mudblazor.com/snippet/wEQnOtPLgwHdLPka *@
             <MudItem xs="6" sm="6" md="2" Style="display: flex;align-items: center;justify-content: center;" Class="mb-2">
                 <MudButtonGroup VerticalAlign="true" OverrideStyles="false">
-                    <MudButton StartIcon="@Icons.Material.Filled.StopCircle" Size="Size.Small" Variant="Variant.Filled" Style="width:124px;" Color="Color.Error" OnClick="CancelAlgorithm" Disabled="@(!_isAlgorithmRunning &&!_isGridReset)">Cancel</MudButton>
+                    <MudButton StartIcon="@Icons.Material.Filled.StopCircle" Size="Size.Small" Variant="Variant.Filled" Style="width:124px;" Color="Color.Error" OnClick="CancelAlgorithm" Disabled="@(!_isAlgorithmRunning &&!_isGridReset || !_isAlgorithmRunning)">Cancel</MudButton>
                     <MudMenu Label="Reset" Disabled="@_isAlgorithmRunning" Color="Color.Warning" Variant="Variant.Filled" Style="width:124px;" StartIcon="@Icons.Material.Filled.Repeat" EndIcon="@Icons.Material.Filled.KeyboardArrowDown">
                         <MudMenuItem IconColor="Color.Info" OnClick="ClearVisitedNodes" OnTouch="ClearVisitedNodes" Icon="@Icons.Material.Filled.CropSquare">Clear Visited</MudMenuItem>
                         <MudMenuItem IconColor="Color.Tertiary" OnClick="ClearWalls" OnTouch="ClearWalls" Icon="@Icons.Material.Filled.GridOff">Clear Visited & Walls</MudMenuItem>

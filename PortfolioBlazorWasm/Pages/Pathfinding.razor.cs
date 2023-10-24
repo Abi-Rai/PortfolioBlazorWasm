@@ -19,7 +19,7 @@ public partial class Pathfinding : IDisposable
     
     private Node? _draggedNode;
     private SearchSettings _searchSettings;
-    private CancellationTokenSource _cts;
+    private CancellationTokenSource? _cts;
     private GridSettings _gridSettings;
 
     protected override async Task OnInitializedAsync()
@@ -30,7 +30,6 @@ public partial class Pathfinding : IDisposable
         _isDragging = false;
         _isPlaceWalls = false;
         _searchSettings = new() { SearchSpeed = SearchSpeeds.Medium };
-        _cts = new();
         _gridSettings = new GridSettings();
     }
 
@@ -62,6 +61,7 @@ public partial class Pathfinding : IDisposable
         SnackBarService.AddTwoSecond($"Algorithm type:{_searchSettings.AlgorithmType} speed:{_searchSettings.SearchSpeed}", MudBlazor.Severity.Info);
         _isAlgorithmRunning = true;
         _isGridReset = false;
+        _cts = new();
         try
         {
             var found = await PathFindingService.RunAlgorithm(_searchSettings, _cts.Token);
@@ -130,12 +130,9 @@ public partial class Pathfinding : IDisposable
         return Task.CompletedTask;
     }
 
-    private Task CancelAlgorithm()
+    private void CancelAlgorithm()
     {
-        return Task.Run(() =>
-        {
-            _cts.Cancel();
-        });
+        _cts?.Cancel();
     }
 
     private async Task OnShortestPathFoundAsync(object? sender, Stack<Node> shortestPath)
