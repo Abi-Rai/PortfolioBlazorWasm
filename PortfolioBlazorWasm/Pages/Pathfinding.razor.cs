@@ -8,7 +8,7 @@ using PortfolioBlazorWasm.Models.Pathfinding.Mazes;
 
 namespace PortfolioBlazorWasm.Pages;
 
-public partial class Pathfinding
+public partial class Pathfinding : IDisposable
 {
     [CascadingParameter] public MudThemeProvider ThemeProvider { get; set; }
     [Inject] public ILogger<Pathfinding> Logger { get; set; }
@@ -290,6 +290,19 @@ public partial class Pathfinding
         }
         return className;
     }
+
     #endregion
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _cts.Dispose();
+        }
+    }
 }
 
