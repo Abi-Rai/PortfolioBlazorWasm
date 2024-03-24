@@ -16,10 +16,10 @@ public partial class Pathfinding : IDisposable
     private bool _isGridReset;
     private bool _isDragging;
     private bool _isPlaceWalls;
-
+    
     private Node? _draggedNode;
     private SearchSettings _searchSettings;
-    private CancellationTokenSource _cts;
+    private CancellationTokenSource? _cts;
     private GridSettings _gridSettings;
 
     protected override async Task OnInitializedAsync()
@@ -30,13 +30,11 @@ public partial class Pathfinding : IDisposable
         _isDragging = false;
         _isPlaceWalls = false;
         _searchSettings = new() { SearchSpeed = SearchSpeeds.Medium };
-        _cts = new();
         _gridSettings = new GridSettings();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await base.OnAfterRenderAsync(firstRender);
         if (firstRender)
         {
             await PathFindingService.GenerateAndSetGridAsync(_gridSettings.RowCount, _gridSettings.ColumnCount);
@@ -63,6 +61,7 @@ public partial class Pathfinding : IDisposable
         SnackBarService.AddTwoSecond($"Algorithm type:{_searchSettings.AlgorithmType} speed:{_searchSettings.SearchSpeed}", MudBlazor.Severity.Info);
         _isAlgorithmRunning = true;
         _isGridReset = false;
+        _cts = new();
         try
         {
             var found = await PathFindingService.RunAlgorithm(_searchSettings, _cts.Token);
@@ -131,12 +130,9 @@ public partial class Pathfinding : IDisposable
         return Task.CompletedTask;
     }
 
-    private Task CancelAlgorithm()
+    private void CancelAlgorithm()
     {
-        return Task.Run(() =>
-        {
-            _cts.Cancel();
-        });
+        _cts?.Cancel();
     }
 
     private async Task OnShortestPathFoundAsync(object? sender, Stack<Node> shortestPath)
@@ -164,7 +160,7 @@ public partial class Pathfinding : IDisposable
     #endregion
 
     #region Drag & click cell methods
-    private void HandleWallPlace(Node nodeSelected)
+    private static void HandleWallPlace(Node nodeSelected)
     {
         if (nodeSelected.State == NodeState.None || nodeSelected.State == NodeState.Wall)
         {
@@ -172,7 +168,7 @@ public partial class Pathfinding : IDisposable
         }
     }
 
-    public void HandleClickedCell(Node selectedNode)
+    public static void HandleClickedCell(Node selectedNode)
     {
         if (selectedNode.State == NodeState.None || selectedNode.State == NodeState.Wall)
         {
@@ -180,7 +176,7 @@ public partial class Pathfinding : IDisposable
         }
     }
 
-    private NodeState ToggleWallState(NodeState nodeState)
+    private static NodeState ToggleWallState(NodeState nodeState)
     {
         return (nodeState == NodeState.None ? NodeState.Wall : NodeState.None);
     }
@@ -218,14 +214,14 @@ public partial class Pathfinding : IDisposable
         }
     }
 
-    private string GetDraggable(NodeState nodeState)
+    private static string GetDraggable(NodeState nodeState)
     {
         if (IsDraggable(nodeState))
             return "true";
         return "false";
     }
 
-    private bool IsDraggable(NodeState nodeState)
+    private static bool IsDraggable(NodeState nodeState)
     {
         return nodeState == NodeState.Start || nodeState == NodeState.Finish;
     }
@@ -292,6 +288,10 @@ public partial class Pathfinding : IDisposable
     }
 
     #endregion
+
+    #region Dispose pattern
+
+    private bool _disposed = false;
     public void Dispose()
     {
         Dispose(true);
@@ -299,10 +299,21 @@ public partial class Pathfinding : IDisposable
     }
     protected virtual void Dispose(bool disposing)
     {
+        if (_disposed)
+            return;
+
         if (disposing)
         {
+            PathFindingService.VisitedChanged -= OnNodesVisitedAsync;
+            PathFindingService.ShortestFound -= OnShortestPathFoundAsync;
             _cts.Dispose();
         }
+        _disposed = true;
     }
+    ~Pathfinding()
+    {
+        Dispose(false);
+    }
+    #endregion
 }
 
