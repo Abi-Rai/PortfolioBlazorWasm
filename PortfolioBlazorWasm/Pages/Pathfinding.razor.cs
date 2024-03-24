@@ -306,7 +306,7 @@ public partial class Pathfinding : IDisposable
         {
             PathFindingService.VisitedChanged -= OnNodesVisitedAsync;
             PathFindingService.ShortestFound -= OnShortestPathFoundAsync;
-            _cts.Dispose();
+            _cts?.Dispose();
         }
         _disposed = true;
     }
